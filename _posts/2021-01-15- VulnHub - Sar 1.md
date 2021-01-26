@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Sar 1"
-tags: [Linux, Easy]
+tags: [Linux, Easy, sarHTML, ExploitDB, Linpeas, Gobuster, Crontab]
 categories: VulnHub
 ---
 
