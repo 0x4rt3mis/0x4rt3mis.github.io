@@ -162,7 +162,7 @@ Agora ganhamos um reverse shell
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/rev3.png)
 
-# www-data -> Nitish
+# www-data - Nitish
 
 Essa é fácil, já temos as credenciais, mas antes vamos ver outro ponto bacana, lembra daquela porta 22 que estava filtrada? Então, possivelmente temos que realizar um port knocking nela
 
@@ -185,7 +185,7 @@ Vamos tentar bater nelas então pra ver se conseguimos abrir a porta 22 e acessa
 ### Através do nmap
 
 ```bash
-for x in 1356 6784 3409; do nmap -Pn --max-retries 0 -p $x 192.168.56.103; done 
+for x in 1356 6784 3409; do nmap -Pn --max-retries 0 -p $x 192.168.56.113; done 
 ```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/knock1.png)
@@ -276,7 +276,7 @@ Baixamos ele pra nossa Kali e verificamos do que se trata esse formato pyc
 
 Então vamos decompilar ele pra ter o código fonte
 
-Vamos utilizad o python-uncompyle6
+Vamos utilizar o **python-uncompyle6**
 
 **https://github.com/rocky/python-uncompyle6.git**
 
