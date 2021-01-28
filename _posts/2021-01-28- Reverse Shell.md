@@ -1,7 +1,7 @@
 ---
 title: "Reverse Shell"
 tags: []
-categories: Comandos
+categories: Metodologias
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/aleatorias/Reverse-Shell-illustration.png)
