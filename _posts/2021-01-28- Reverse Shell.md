@@ -4,6 +4,10 @@ tags: []
 categories: Comandos
 ---
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/aleatorias/Reverse-Shell-illustration.png)
+
+Link: <https://github.com/0x4rt3mis/Codigos/blob/main/Metodologias%20e%20CheatSheets/Reverse%20Shell.md>
+
 # Shell Reverso
 
 Aqui vou colocar diferentes modos de se conseguir um reverse shell durante suas explorações. Também vou deixar em destaque as que mais utilizo.
