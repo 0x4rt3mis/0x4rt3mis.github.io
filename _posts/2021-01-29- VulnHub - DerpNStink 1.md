@@ -107,6 +107,16 @@ Acessamos o /phpmyadmin
 
 Show, encontramos isso... vamos prosseguir
 
+Tentamos as credenciais padrão do mysql, **root:mysql** e conseguimos entrar!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/myadmin.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/myadmin1.png)
+
+Tentamos verificar se a versão do **phpmyadmin** é vulnerável, mas não conseguimos muito sucesso nessa exploração
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/myadmin2.png)
+
 ### /temporary/
 
 Acessamos, e deu acesso 'try harder'
@@ -197,6 +207,24 @@ Encontramos a senha padrão do admin, que é admin
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/wpscan3.png)
 
-Também encontramos um plugin desatualizado... Bom ponto de vulnerabilidade
+Também encontramos um plugin desatualizado **slideshow-gallery** ... Bom ponto de vulnerabilidade
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/wpscan4.png)
+
+Vamos explorar então...
+
+# Reverse Shell
+
+Primeiro modo que vou fazer é através de um exploit já pronto
+
+## Exploit
+
+Pesquisamos por exploits pra ele, e encontramos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/saerch.png)
+
+Copiamos ele para nossa pasta de trabalho
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/search.png)
+
+
