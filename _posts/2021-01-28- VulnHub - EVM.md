@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - EVM"
-tags: [Linux, Easy]
+tags: [Linux, Easy, WordPress, WPForce, Wfuzz, BurpSuite, Wpscan, Metasploit, Linpeas]
 categories: VulnHub
 ---
 
@@ -182,3 +182,43 @@ Agora executamos o payload
 Recebemos o reverse
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/php4.png)
+
+# www-data - Root
+
+Agora vamos iniciar a escalação de privilégio dessa máquinas
+
+Rodamos o [linpeas](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/linpeas.png)
+
+Baixamos ele na nossa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/linpeas1.png)
+
+E executamos no servidor
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/lin.png)
+
+Encontramos a senha do mysql
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/lin1.png)
+
+Logamos nele com sucesso, mas não conseguimos extrair muita coisa
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/mysql.png)
+
+Senha do root???!!!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/lin2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/lin3.png)
+
+Sim, é a senha do root...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/lin4.png)
+
+# Flags
+
+Ai está a flag de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/root.png)
