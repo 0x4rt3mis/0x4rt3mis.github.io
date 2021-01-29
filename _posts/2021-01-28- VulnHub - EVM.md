@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - EVM"
-tags: [Linux, Easy, WordPress, WPForce, Wfuzz, BurpSuite, Wpscan, Metasploit, Linpeas]
+tags: [Linux, Easy, WordPress, WPForce, Wfuzz, BurpSuite, Wpscan, Metasploit, Linpeas, Nullinux, Smbclient, SMBMap, Nslookup]
 categories: VulnHub
 ---
 
@@ -41,6 +41,60 @@ arp-scan -I eth1 192.168.56.100/24
 > Portas 110, 139 e 143 -> E-mail
 
 > Porta 445 -> SMB
+
+## Enumeração da porta 445
+
+Vamos iniciar enumerando a porta 445
+
+```bash
+smbclient -L //192.168.56.103
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/smbclient.png)
+
+```bash
+smbmap -H 192.168.56.103
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/smbmap.png)
+
+Nada... vamos utilizar uma ferramenta chamada **nullinux** para enumeração dessa porta, pra ver se encontramos algo a mais
+
+[nullinux](https://github.com/m8r0wn/nullinux)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/nullinux.png)
+
+Baixamos em nossa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/nullinux1.png)
+
+Instalamos ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/nullinux2.png)
+
+Executamos
+
+```bash
+nullinux 192.168.56.103
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/nullinux3.png)
+
+Nada... vamos prosseguir
+
+Tentamos o eternal blue também e nada...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/eternal.png)
+
+Não há mais o que possamos fazer
+
+## Enumeração da Porta 53
+
+Primeira atividade é tentar resolver o domínio dele, pelo **nslookup**, pra tentarmos fazer uma transferência de zona
+
+Mas de cara já vemos que não é possível, pois ele não tem nenhum nome atrelado ao IP
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/nslook.png)
 
 ## Enumeração da Porta 80
 
