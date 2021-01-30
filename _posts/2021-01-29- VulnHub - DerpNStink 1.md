@@ -444,7 +444,7 @@ Achamos a senha
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/pcap4.png)
 
-# Mderp -> Root
+# Mrderp -> Root
 
 Logamos como **mrderp**
 
