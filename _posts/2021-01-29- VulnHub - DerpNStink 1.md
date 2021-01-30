@@ -448,7 +448,7 @@ Achamos a senha
 
 Logamos como **mrderp**
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/mderp.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-derpnstink/derp.png)
 
 Verificamos que ele pode executar comandos como root
 
