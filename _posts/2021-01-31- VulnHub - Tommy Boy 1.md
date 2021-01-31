@@ -464,7 +464,7 @@ Pegamos a quinta flag
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/flag3.png)
 
-## LOOT.zip
+# LOOT.zip
 
 A senha pra desbloqueio vai ser
 
@@ -473,3 +473,25 @@ A senha pra desbloqueio vai ser
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/flag4.png)
 
 Fechamos!
+
+# Algo a Mais
+
+Vamos verificar como está sendo feito o upload de arquivos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/back.png)
+
+Aqui está o trecho do código que "sanitiza" nosso php, e percebe que não é uma imagem de fato
+
+```php
+// Check if image file is a actual image or fake image
+//if(isset($_POST["submit"])) {
+//    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+//    if($check !== false) {
+//        echo "File is an image - " . $check["mime"] . ".";
+//        $uploadOk = 1;
+//    } else {
+//        echo "File is not an image.";
+//        $uploadOk = 0;
+//    }
+//}
+```
