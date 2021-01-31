@@ -1,12 +1,12 @@
 ---
 title: "VulnHub - Tommy Boy 1"
-tags: [Linux, Easy, Gobuster, Wfuzz, BurpSuite, Hydra, Medusa, Sudo]
+tags: [Linux, Medium, Wpscan, Gobuster, Wfuzz, Exiftool, Binwalk, FTP, Wfuzz User Agent, Wfuzz Brute Force, Crunch, Fcrackzip, Wordpress, Magic Number, Find]
 categories: VulnHub
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/inicial.png)
 
-Link: [RickdiculouslyEasy](https://www.vulnhub.com/entry/rickdiculouslyeasy-1,207/)
+Link: [Tommy Boy 1](https://www.vulnhub.com/entry/tommy-boy-1,157/)
 
 # Enumeração
 
@@ -333,3 +333,143 @@ Senha quebrada!
 Dezipamos o arquivo
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/fcrack1.png)
+
+Lemos o arquivo password.txt
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/fcrack2.png)
+
+Bom... aqui ele fala de usuários que tem acesso ao servidor... vamos verificar quais usuários ativos temos no wordpress
+
+## Wordpress
+
+```bash
+wpscan  --url 192.168.56.116/prehistoricforest/ --enumerate u
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/wpscan.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/wpscan1.png)
+
+Então agora vamos fazer o bruteforce desse usuário tom
+
+### Wfuzz
+
+Podemos fazer pelo wfuzz
+
+```bash
+wfuzz -c -z file,/usr/share/seclists/Passwords/darkweb2017-top10000.txt --hl 71 --hs incorrect -d "log=tom&pwd=FUZZ" http://192.168.56.116/prehistoricforest/wp-login.php
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/brute.png)
+
+### Wpscan
+
+Também pelo wpscan
+
+```bash
+wpscan --url http://192.168.56.116/prehistoricforest -P /usr/share/seclists/Passwords/darkweb2017-top10000.txt -U tom
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/brute1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/brute2.png)
+
+# Reverse Shell
+
+Bom, uma vez com uma senha, vamos tentar conseguis um shell nessa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/login.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/login1.png)
+
+Olhando nos "Drafts" encontramos algo de interessante, onde ele menciona sobre o **passwords.txt** de antes
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/login2.png)
+
+Bom, sendo assim, logo já tentei um ssh com o usuário bigtommysenior e a senha fatguyinalittlecoat1938!!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/ssh.png)
+
+Pegamos a quarta flag
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/flag2.png)
+
+Verificamos na mensagem que a outra flag está em **/.5.txt** e realmente está lá, só que quem é o dono dela é o **www-data**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/ssh1.png)
+
+Devemos pegar um reverse shell como www-data... verificando no wordpress não temos como modificar os plugins, pq não temos permissões para isso...
+
+Verificamos pelo **find / -perm -2 -type d 2>/dev/null** as pastas que ele tem permissão
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/find.png)
+
+Também podemos verificar no **apache2** verificamos uma "pasta secreta" dele
+
+**cat /etc/apache2/sites-enabled/2.conf**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/apache.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/apache1.png)
+
+Acessamos via navegador, lembrar de manter o User Agent como Iphone...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/apach2.png)
+
+Copiamos nosso php-reverse-shell, modificamos o IP e a Porta
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/reverse.png)
+
+Upamos no site
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/reverse2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/reverse3.png)
+
+Certo, temos que mudar o magic number dele
+
+Verificamos no arquivo .htaccess que os arquivos .gif serão interpretados como php
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/reverse1.png)
+
+## Mudando o Magic Number
+
+Colocamos **GIF89a** na primeira linha do arquivo
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/magic.png)
+
+Assim não deu certo...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/magic1.png)
+
+Bom, ele tem filtros bacanas ali... mas o que podemos fazer é jogar uma imagem msm, (na verdade um shell, só que .gif) e mudar dentro da pasta para .php
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/mv.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/mv1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/mv2.png)
+
+Show... agora alteramos ele dentro da pasta para .php
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/mv3.png)
+
+## www-data
+
+Agora recebemos o reverse shell
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/mv4.png)
+
+Pegamos a quinta flag
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/flag3.png)
+
+## LOOT.zip
+
+A senha pra desbloqueio vai ser
+
+**B34rcl4wsZ4l1nskyTinyHeadEditButtonButtcrack**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/flag4.png)
+
+Fechamos!
