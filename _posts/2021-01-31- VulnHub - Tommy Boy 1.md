@@ -199,3 +199,137 @@ Acessamos aquele post que precisava de senha com essa senha
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/pass.png)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/pass1.png)
+
+Bom aqui ta falando que tem um servidor FTP que abre e fecha... temos um login e ele fala que a senha é bem fraca...
+
+Vamos fazer um nmap full port scan pra ver se encontramos algo
+
+Primeiro não encontramos nada...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/full.png)
+
+Então esperamos 15 minutos como está descrito no post...
+
+E...
+
+Ai está!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/ftp.png)
+
+## Enumeração da Porta 65534
+
+É um ftp... login e senha **nickburns** como está no post descrito
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/ftp1.png)
+
+Baixamos o arquivo que está sendo fornecido ali e lemos ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/ftp2.png)
+
+## /NickIzL33t
+
+Aqui fala que tem em algum lugar uma pasta **NickIzL33t**... primeira coisa que me veio na cabeça foi a porta 8008, então vamos lá
+
+Aqui está!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/secret.png)
+
+Hum... perdi um bom tempo aqui até pegar a sacada do Steve Jobs...
+
+Trocamos o User Agent para um da Apple, e deu certo
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/user.png)
+
+Agora fazemos um brute force com o wfuzz, pra descobrir esse html que ele fala, coloquei uma wordlist pequena, mas essa palavra tem na **rockyou**
+
+```bash
+wfuzz -c --hw 32,14 -z file,wordlist.txt -H "User-Agent: Iphone" http://192.168.56.116:8008/NickIzL33t/FUZZ.html
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/wfuzz1.png)
+
+Ai está... **fallon1.html**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/fallon.png)
+
+Acessamos os arquivos
+
+**hint.txt**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/hint.png)
+
+**flagtres.txt**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/hint1.png)
+
+**backup**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/hint2.png)
+
+## Gerando Wordlists
+
+Bom, será necessária a geração de wordlists para podermos quebrar a senha do backup... O que sabemos até agora?
+
+```
+Primeiras 3 letras são 'bev'
+Quatro últimas são '1995'
+bev******1995
+```
+
+### Crunch
+
+Primeiro vamos demonstrar com o crunch a geração dessa senha, verificamos como usamos o crunch no man
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/crunch.png)
+
+```bash
+crunch 13 13 -t bev,%%@@^1995 -o tommy.txt
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/crunch1.png)
+
+### Python
+
+Agora vamos demonstrar através de um script em python
+
+gerar.py
+```python
+import string
+import itertools
+
+prefix = 'bev'
+suffix = '1995'
+uppercase = list(string.ascii_uppercase)
+lowercase = list(string.ascii_lowercase)
+numbers = list(string.digits)
+symbols = list('$%^&*()-_+=|\<>[]{}#@/~')
+
+part1 = uppercase
+part2 = [''.join(s) for s in itertools.product(numbers, repeat=2)]
+part3 = [''.join(s) for s in itertools.product(lowercase, repeat=2)]
+part4 = symbols
+
+candidates = reduce(lambda a,b: [i+j for i in a for j in b], [part1, part2, part3, part4])
+for candidate in candidates:
+  print prefix + candidate + suffix
+```
+
+Ai está
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/pyt.png)
+
+## Fcrackzip
+
+Agora com o **fcrackzip** fazemos a quebra da senha do arquivo zip
+
+```bash
+fcrackzip -v -D -u -p senhas.txt t0msp4ssw0rdz.zip
+```
+
+Senha quebrada!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/fcrack.png)
+
+Dezipamos o arquivo
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-tommyboy1/fcrack1.png)
