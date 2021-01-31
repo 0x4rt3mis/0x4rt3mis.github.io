@@ -74,7 +74,7 @@ Primeira coisa é abrirmos a página web
 Rodamos o gobuster nela
 
 ```bash
-gobuster dir -u http://192.168.56.115 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 100
+gobuster dir -u http://192.168.56.115 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 150
 ```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-rickdiculouslyeasy/gobuster.png)
@@ -83,7 +83,7 @@ Encontramos a página **/passwords**
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-rickdiculouslyeasy/gobuster1.png)
 
-Encontramos a flag numero 2
+Encontramos uma flag
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-rickdiculouslyeasy/flag2.png)
 
@@ -190,6 +190,12 @@ Encontramos mais uma flag!
 Opa, mais uma flag
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-rickdiculouslyeasy/flag5.png)
+
+## Enumeração da porta 13337
+
+Flag...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-rickdiculouslyeasy/flag10.png)
 
 ## Enumeração Porta 22222
 
