@@ -109,12 +109,96 @@ Em outro e-mail ele fala sobre informações sensíveis no portal do admin
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/email4.png)
 
-### Arquivo PCAP
-
 Pesquisando encontramos algo interessante no portal
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/pass.png)
 
+Aqui ele fala da senha ser tomcat, então testamos essa senha no arquivo java
+
+```bash
+keytool -list -keystore keystore
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/java.png)
+
+Sim, é essa a senha do arquivo
+
+### Arquivo PCAP
+
+Baixamos o arquivo pcap para analisar ele, arquivo que foi mencionado no post
+
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/pass1.png)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/pass2.png)
+
+Abrimos ele no wireshark
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/pass3.png)
+
+Verificamos que é uma conexão na porta 8443, possivelmente está criptografado, então não vamos ter acesso fácil assim a essas informações...
+
+Pra coneguirmos ver o que tem ali temos que converter o **keystore** para **PKCS12**, um formato que posso colocar no wireshark e ele irá abrir...
+
+### Keytool Decrypt
+
+```bash
+keytool -importkeystore -srckeystore keystore -destkeystore keystore.p12 -deststoretype PKCS12 -srcalias tomcat
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/pass4.png)
+
+Agora podemos importar esse certificado no wireshark, e sendo assim, ler as mensagens em claro
+
+**"Edit"->"Preferences"->"Protocols"->"TLS".**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/wireshark.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/wireshark1.png)
+
+**"Direito"->"Follow"->"TLS Stream"**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/wireshark2.png)
+
+Verificamos que ele faz uma requisição para o GET /_M@nag3Me/html
+
+Outra coisa interessante é um base64 de autenticação ali
+
+**Authorization: Basic dG9tY2F0OlR0XDVEOEYoIyEqdT1HKTRtN3pC**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/auth.png)
+
+Que quer dizer...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/auth1.png)
+
+**tomcat:Tt\5D8F(#!*u=G)4m7zB**
+
+Outra coisa que nos chamou muita atenção foi um /cmd que executa comandos no site... isso é interessante!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/cmd.png)
+
+## Tomcat
+
+Então, entramos nesse site pra ver o que tem nele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/site.png)
+
+Ele não "confia" no site, tem que ser passado por um proxy antes, que é feita a verificação, o modo mais fácil é fazer ele passar pelo BurpSuite
+
+Apenas ligamos ele pra servir como proxy, ai ele confia e deixa a gente acessar!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/burp.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/burp1.png)
+
+Ativamos ele, e estamos dentro!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/site1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/site2.png)
+
+Logamos então com as credenciais encontradas no pcap
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/site3.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/site4.png)
