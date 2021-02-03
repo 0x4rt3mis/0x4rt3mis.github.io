@@ -13,7 +13,7 @@ Link: [Breach 1](https://www.vulnhub.com/entry/breach-1,152/)
 ## Primeiro passo é rodar o arp-scan para detectarmos os hosts
 
 ```bash
-arp-scan -I eth1 192.168.56.100/24
+arp-scan -I eth1 192.168.110.100/24
 ```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/arp.png)
