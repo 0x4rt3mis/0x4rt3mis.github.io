@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Breach 2"
-tags: [Linux, Medium]
+tags: [Linux, Medium, Gobuster, BlogPHP, XSS, Firefox XSS, Linpeas, SSH Reverse Forwading, osCommerce, tcpdump, LFI]
 categories: VulnHub
 ---
 
@@ -177,7 +177,7 @@ Verificamos no /etc/sshd_config a resposta para isso
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/ssh2.png)
 
-# Peter
+# Peter -> Milton
 
 Bom, para pegarmos um shell é simples
 
@@ -222,3 +222,163 @@ Pareceu uma coordenada
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/coorf1.png)
 
 Realmente, é da cidade de houston
+
+### SSH Port Forwading
+
+Então fazemos um Port Forwading pra ficar melhor de trabalhar com essa máquina
+
+```bash
+ssh -R 2323:127.0.0.1:2323 kali@192.168.110.103
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/for.png)
+
+Pronto, está aberta localmente
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/for1.png)
+
+Conseguimos login com o usuário **milton:Houston** mas que que é Stapler????
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/for2.png)
+
+A resposta encontramos procurando pela string na máquina
+
+```bash
+grep -rl "Whose stapler is it?" / 2>/dev/null
+```
+
+Encontramos um script que tem essas palavras
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/for3.png)
+
+Verificamos o que ele faz
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/for4.png)
+
+Verificamos que a resposta é "mine" e pegamos um shell de milton
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/for5.png)
+
+Verificamos novamente e encontramos a porta 8888 aberta...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/for6.png)
+
+# Milton -> Blumbergh
+
+Fazemos um nmap nela pra ver do que se trata
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/for7.png)
+
+Nginx? É web!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/nginx.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/ngix1.png)
+
+## osCommerce
+
+Acessamos e verificamos um CMS? OsCOMMERCE
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/nginx1.png)
+
+Vamos explorar de duas maneiras
+
+### Manual
+
+Encontramos um painel de admin
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/log.png)
+
+Tentamos o login **admin:admin**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/log1.png)
+
+Sucesso!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/log2.png)
+
+Encontramos um File Manager
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/log3.png)
+
+Interessante, podemos tentar jogar algum código php e acessar ele, nos dando um reverse shell
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/php.png)
+
+Encontramos um diretório que podemos escrever
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/php1.png)
+
+Adicionamos nosso reverse shell lá
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/php2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/php3.png)
+
+**http://192.168.110.151:8888/oscommerce/includes/work/php-reverse-shell.php**
+
+Temos um reverse!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/php2.png)
+
+### Através do Exploit
+
+Dando uma pesquisada rápida encontramos por um exploit pra ele
+
+[Exploit](https://www.exploit-db.com/exploits/33913)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/osc.png)
+
+Tive que adicionar mais uns /../../ dentro do exploit, mas deu certo
+
+**http://192.168.110.151:8888/oscommerce/admin/includes/applications/services/pages/uninstall.php?module=../../../../../../../../../../../../tmp/test**
+
+Colocamos um arquivo test.php dentro do tmp, para ser executado
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/lfi1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/lfi2.png)
+
+Agora eu coloco o php-reverse-shell que foi usado antes, dentro dessa pasta tmp
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/lfi3.png)
+
+Agora é só executar
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/lfi4.png)
+
+# Blumbergh -> Root
+
+Agora vamos escalar privilégio para root, com o comando **sudo -l** verificamos que podemos executar o tcpdump como root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/sudo.png)
+
+[GTFobins](https://gtfobins.github.io/gtfobins/tcpdump/#sudo)
+
+Verificamos no GTFObins como fazemos para escalar privilégio com essa permissão
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/sudo1.png)
+
+Criamos um script para ser executado pelo tcpdump que colocar o blumbergh pra ser um dos sudoers
+
+```bash
+echo 'echo "blumbergh ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers' > /tmp/rooter && chmod +x /tmp/rooter
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/sudo2.png)
+
+Executamos
+
+```bash
+sudo /usr/sbin/tcpdump -ln -i eth0 -w /dev/null -W 1 -G 1 -z /tmp/rooter -Z root
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/sudo3.png)
+
+Viramos root!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/sudo4.png)
+
+Pegamos a flag
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/flag.png)
