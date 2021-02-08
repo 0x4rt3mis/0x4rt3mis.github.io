@@ -252,6 +252,10 @@ Agora então acessamos ele com a senha **elite**
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/elite1.png)
 
+# Exploração SQL
+
+Agora que encontramos um banco da dados... vamos iniciar a exploração dele. Vou mostrar do modo manual, explicando cada parâmetro e comando e também o modo automatizado através da ferramenta SQLMAP, vamos lá então!
+
 ## SQLInjection
 
 Bom, agora vamos ver o que podemos fazer com esse novo form
@@ -395,3 +399,112 @@ sqlmap -u http://192.168.56.118/kzMb5nVYJw/420search.php?usrtosearch= --dump
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqlmap2.png)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/sqlmap3.png)
+
+Com essa senha podemos fazer SSH com o usuário ramses
+
+# Ramses -> root
+
+Fazendo ssh temos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/ram.png)
+
+Vamos iniciar a enumeração dele então
+
+## Linpeas
+
+[Linpeas](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/lin.png)
+
+Baixamos pra nossa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/lin1.png)
+
+Executamos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/lin2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/lin3.png)
+
+Verificamos que temos um binário com suid habilitado, o **procwatch**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/suid.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/suid1.png)
+
+## SUID
+
+Então vamos verificar o que podemos fazer ali, executando ele vemos que é um **ps**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/ps.png)
+
+Então podemos fazer o nosso "ps" e nos dar um shell de root
+
+Exportamos o PATH e fazemos um link simbólico para o /bin/sh
+
+```
+export PATH=/var/www/backup:$PATH
+ln -s /bin/sh ps
+```
+
+Executamos e somos root!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/ps1.png)
+
+Lemos a flag!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/ps2.png)
+
+# Algo a Mais
+
+Outro ponto de entrada na máquina é através do mysql também
+
+## MYSql no SQLInjection
+
+Conseguimos ler o arquivo de configuração e pegar a credencial do banco de dados do phpmyadmin através do SQLInjection
+
+A ideia aqui é simples, pensamos assim, pô sempre que eu faço uma requisição nesse campo search, ele me retorna dados, então ele com certeza está se ligando a um banco de dados... será que não conseguimos ler esse arquivo e pegar essas credenciais, que possivelmente são as mesmas do **phpmyadmin**?
+
+Vamos lá então
+
+Aqui está o arquivo
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/l.png)
+
+Lendo ele temos as credenciais
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/L.png)
+
+## MySQL - Já dentro
+
+Encontramos credenciais para acessar o mysql, isso depois de fazer o ssh com o usuário ramses
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/lin4.png)
+
+Acessamos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/lin5.png)
+
+Encontramos alguns hashs
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/mysql.png)
+
+Possivelmente a senha **sunnyvale** é a mesma pro **root** do **phpmyadmin**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/mysql1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/mysql2.png)
+
+Bom, depois verificamos que exploramos mais aqui ou não... vamos prosseguir
+
+## www-data reverse
+
+Agora com essas credenciais podemos pegar um shell de www-data, uma vez que a aplicação phpmyadmin roda como se **www-data** fosse
+
+Vamos ver a versão do phpmyadmin
+
+**4.2.12**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/php1.png)
+
+
