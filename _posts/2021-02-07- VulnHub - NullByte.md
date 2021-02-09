@@ -22,8 +22,6 @@ arp-scan -I eth1 192.168.56.0/24
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/nmap.png)
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-nullbyte/nmap1.png)
-
 ### Explicação de cada parâmetro do Nmap
 
 > -sC --> Rodar alguns scripts padrão em cada porta
