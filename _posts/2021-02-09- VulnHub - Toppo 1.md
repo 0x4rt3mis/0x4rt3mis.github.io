@@ -148,8 +148,6 @@ python2.7 -c "import pty; pty.spawn('/bin/sh');"
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-toppo1/p2.png)
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-toppo1/p3.png)
-
 ## Quebrando senha do root
 
 Que tal tentarmos quebrar o hash da senha do root do shadow?
