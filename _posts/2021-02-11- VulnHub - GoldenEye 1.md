@@ -105,7 +105,7 @@ E executamos nosso wfuzz
 wfuzz -c -b "Authorization: Basic Ym9yaXM6SW52aW5jaWJsZUhhY2szcg==" --hs 401 -t 200 -w '/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt' -u 'http://192.168.56.101/sev-home/FUZZ'
 ```
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/sev4.png)
+Não coloquei a foto pq não conseguimos nada... fica apenas pra conhecimento o comando...
 
 Nada... vamos prosseguir
 
