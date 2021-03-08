@@ -43,7 +43,7 @@ Full ports scan
 
 > Porta 80 -> Web
 
-> Portas 25, 55006 e 55007 -> E-mail
+> Portas 25, 55006 e 55007 -> E-mail (?!)
 
 ## Enumeração da Porta 80
 
