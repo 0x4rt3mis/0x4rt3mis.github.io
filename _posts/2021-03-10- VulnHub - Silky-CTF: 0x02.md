@@ -36,7 +36,7 @@ Full ports scan
 
 > -T5 --> Modo insano
 
-### Verificamos que temos 4 portas aberta no servidor
+### Verificamos que temos 2 portas aberta no servidor
 
 > Porta 80 -> Web
 
