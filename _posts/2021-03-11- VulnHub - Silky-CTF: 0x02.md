@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - Silky-CTF: 0x02"
 tags: [Linux, Medium]
-categories: VulnHub,OSWE
+categories: VulnHub OSWE
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-silky/inicial.png)
