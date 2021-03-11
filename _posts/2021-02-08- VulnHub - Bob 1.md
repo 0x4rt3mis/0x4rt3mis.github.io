@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - Bob 1"
 tags: [Linux, Easy, GPG, Robots, Gobuster, Sudo]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-bob1/inicial.png)

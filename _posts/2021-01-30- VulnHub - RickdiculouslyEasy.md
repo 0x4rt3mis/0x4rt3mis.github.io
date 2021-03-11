@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - RickdiculouslyEasy 1"
 tags: [Linux, Easy, Gobuster, Wfuzz, BurpSuite, Hydra, Medusa, Sudo]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-rickdiculouslyeasy/inicial.png)

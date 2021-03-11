@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - Breach 2"
 tags: [Linux, Medium, Gobuster, BlogPHP, XSS, Firefox XSS, Linpeas, SSH Reverse Forwading, osCommerce, tcpdump, LFI]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach2/inicial.png)

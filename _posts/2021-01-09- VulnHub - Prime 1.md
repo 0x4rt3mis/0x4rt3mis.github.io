@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - Prime 1"
 tags: [Linux,Easy,Kernel,BurpSuite,Wfuzz,Gobuster,4.10.0-28-generic,Wordpress,Linpeas]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-prime1/inicial.png)

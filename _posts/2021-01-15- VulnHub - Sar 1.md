@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - Sar 1"
 tags: [Linux, Easy, sarHTML, ExploitDB, Linpeas, Gobuster, Crontab]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-sar1/inicial.png)

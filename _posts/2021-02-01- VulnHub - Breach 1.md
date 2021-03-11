@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - Breach 1"
 tags: [Linux, Hard, Gobuster, ImpressCMS, Java Keystore, Keytool, Pcap, SSL, Keytool Decrypt, TLS Stream, Tomcat, Msfvenom, Linpeas, Exiftool, Exif, Sudo, Tee]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-breach1/inicial.png)

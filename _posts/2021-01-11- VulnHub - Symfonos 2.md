@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - Symfonos 2"
 tags: [Linux,Medium,Gobuster,Smbclient,Enum4linux,Chisel,PortForwading,ProFTPD 1.3.5, Hydra, Medusa, Socat, LibreNMS, MySQL, GTFOBINS, John]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos2/inicial.png)

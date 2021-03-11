@@ -203,7 +203,7 @@ Agora vamos demonstrar outro modo
 Utilizando o socat
 
 ```bash
-socat TCP-LISTEN:8081,fork TCP:127.0.0.1:8080
+socat TCP-LISTEN:8888,fork TCP:127.0.0.1:8080
 ```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-symfonos4/socat.png)

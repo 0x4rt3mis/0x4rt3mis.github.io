@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - Djinn 1"
 tags: [Linux, Easy, Port Knocking, Gobuster, BurpSuite, Repeater, Wfuzz, Sudo -l, Pyc, Uncompyle6, Python Input, RawInput, Pwntools, Pwn, Python Command Injection]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-djin1/inicial.png)

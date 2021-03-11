@@ -1,7 +1,7 @@
 ---
 title: "Active Directory - Resumo de Ferramentas"
 tags: [Windows, Active Directory]
-categories: ActiveDirectory
+categories: ActiveDirectory Metodologias
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/active-enum/ferramentas.png)

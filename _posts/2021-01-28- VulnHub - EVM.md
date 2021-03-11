@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - EVM"
 tags: [Linux, Easy, WordPress, WPForce, Wfuzz, BurpSuite, Wpscan, Metasploit, Linpeas, Nullinux, Smbclient, SMBMap, Nslookup]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-evm/inicial.png)

@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - Toppo 1"
 tags: [Linux, Easy, Linpeas, Gobuster, Mawk, John, Python SUID]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-toppo1/inicial.png)

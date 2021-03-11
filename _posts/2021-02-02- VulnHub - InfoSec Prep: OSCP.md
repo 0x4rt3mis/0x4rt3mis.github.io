@@ -1,7 +1,7 @@
 ---
 title: "VulnHub - InfoSec Prep: OSCP"
 tags: [Linux, Easy, Gobuster, Bash SUID, lxd, Linpeas]
-categories: VulnHub
+categories: VulnHub OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-infosecprep/inicial.png)
