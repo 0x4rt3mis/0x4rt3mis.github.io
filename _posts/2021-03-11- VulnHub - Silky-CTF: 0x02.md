@@ -136,7 +136,7 @@ Verificamos se encontramos alguma coisa de interessante nas strings dele
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-silky/buf2.png)
 
-O que chamou atenção foi *strcp* que é vulnerável a buffer overflow... então tentamos mandar uma string pra ele pra ver o que podemos verificar
+O que chamou atenção foi *strcpy* que é vulnerável a buffer overflow... então tentamos mandar uma string pra ele pra ver o que podemos verificar
 
 ```bash
 /usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 100
