@@ -49,7 +49,10 @@ Essa máquina vamos fazer de um modo diferente, ela tem várias vulnerabilidades
 As vulnerabilidades que serão exploradas serão:
 
 1. SQL Injection
-2. Blind SQL Injection
+2. Listar diretórios
+3. Path Transversal
+4. Enumeração de Usuários (BruteForce)
+5. Reflected XSS
 
 ## Enumeração da Porta 80
 
@@ -273,3 +276,85 @@ Aqui está a senha
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/req2.png)
 
 Simples assim.
+
+# Listagem de Diretórios
+
+Com o resultado do gobuster, verificamos que podemos ver o /admin
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/admin.png)
+
+Contudo não coseguimos ver os arquivos, isso vai ser possível na próxima vulnerabilidade explorada
+
+# Path Transversal
+
+Outra coisa que podemos explorar aqui é o Path Transversal
+
+Na parte de downloads, de cara já verificamos que ele está puxando arquivos da máquina
+
+**http://192.168.56.133/download.php?item=Brochure.pdf**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/dow.png)
+
+Podemos alterar o path do Brochure e fazer download de qualquer arquivo que o www-data tenha permissão
+
+**http://192.168.56.133/download.php?item=../../../../../../../etc/passwd**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/dow1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/dow2.png)
+
+Logo, podemos ler os arquivos do diretório /admin
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/dow3.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/dow4.png)
+
+Aqui do mesmo modo vamos conseguir aquela senha do banco de dados.
+
+# Enumeração de Usuários
+
+Conseguimos fazer enumeração de usuários através do campo de login, pois as mensagens de erro são diferentes para usuários não existentes e incorretos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/inv.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/inv1.png)
+
+Conseguimos descobrir o login do admin no blog.php
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/user.png)
+
+Agora podemos fazer um ataque de força bruta nele, pra tentar descobrirmos a senha
+
+Jogamos a requisição pro Burp, pra ver melhor como está sendo feito a requisição
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/brute1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/brute.png)
+
+Agora montamos nossa query com o Wfuzz
+
+## Wfuzz Brute Force
+
+**wfuzz -c -z file,senha.txt -L --hw 173 -d "usermail=admin%40seattlesounds.net&password=FUZZ" http://192.168.56.133/login.php**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/wfuzz.png)
+
+Também podemos utilizar o BurpSuite Intruder pra fazer isso
+
+## BurpSuite Intruder
+
+Enviamos para o Intruder
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/int.png)
+
+Setamos o payload e a wordlist
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/int1.png)
+
+Realizamos o ataque, e a única resposta diferente das demais quer dizer que a tentativa foi sucesso!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/int2.png)
+
+# Reflected XSS
+
+Agora com acesso ao painel de administrador, descobrimos que podemos explorar também a vulnerabilidade de Reflected XSS
