@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Seattle v0.3"
-tags: [Linux, Medium]
+tags: [Linux, Medium, Wfuzz Brute Force, BurpSuite, BurpSuite Intruder, BurpSuite Repeater, Gobuster, XSS, SQLi, SQLMap, John]
 categories: VulnHub OSWE
 ---
 
@@ -170,7 +170,11 @@ Ai estão todas as tables dessa database
 
 Agora vamos extrair as colunas (COLUMN_NAME) das tables
 
-tblBlogs:author,tblBlogs:title,tblBlogs:content,tblMembers:id,tblMembers:username,tblMembers:password,tblMembers:session,tblMembers:name,tblMembers:blog,tblMembers:admin,tblProducts:id,tblProducts:type,tblProducts:name,tblProducts:price,tblProducts:detail
+tblBlogs:author,tblBlogs:title,tblBlogs:content,
+tblMembers:id,tblMembers:username,tblMembers:password,
+tblMembers:session,tblMembers:name,tblMembers:blog,
+tblMembers:admin,tblProducts:id,tblProducts:type,
+tblProducts:name,tblProducts:price,tblProducts:detail
 
 UNION SELECT 1,2,GROUP_CONCAT(TABLE_NAME,":",COLUMN_NAME),4,5 from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = "seattle"-- -
 
@@ -335,7 +339,9 @@ Agora montamos nossa query com o Wfuzz
 
 ## Wfuzz Brute Force
 
-**wfuzz -c -z file,senha.txt -L --hw 173 -d "usermail=admin%40seattlesounds.net&password=FUZZ" http://192.168.56.133/login.php**
+```bash
+wfuzz -c -z file,senha.txt -L --hw 173 -d "usermail=admin%40seattlesounds.net&password=FUZZ" http://192.168.56.133/login.php
+```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/wfuzz.png)
 
@@ -357,4 +363,40 @@ Realizamos o ataque, e a única resposta diferente das demais quer dizer que a t
 
 # Reflected XSS
 
-Agora com acesso ao painel de administrador, descobrimos que podemos explorar também a vulnerabilidade de Reflected XSS
+Agora com acesso ao painel de administrador, descobrimos que podemos explorar também a vulnerabilidade de Reflected XSS.
+
+Mas primeiro, o que é reflected xss?
+
+É uma vulnerabilidade presente em aplicações web que permite que o cibercriminoso insira códigos JavaScript para obter certos tipos de vantagem sobre as vítimas.
+
+O Cross-Site Scripting (XSS) é normalmente aplicado em páginas que sejam comuns a todos os usuários, como por exemplo a página inicial de um site ou até mesmo páginas onde usuários podem deixar seus depoimentos. Para que o ataque possa ocorrer é necessário um formulário que permita a interação do atacante, como por exemplo em campos de busca ou inserção de comentários.
+
+No campo dos comentários verificamos que temos isso habilitado nesse servidor
+
+```js
+<script>alert(document.cookie)</script>
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/xss.png)
+
+Ao acessarmos o blog, temos o XSS sendo executado!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/xss1.png)
+
+# PHPInfo
+
+Temos acesso também ao PHPInfo desse website, isso é bem perigoso pois nos da diversas informações sobre o servidor
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-seattle/php.png)
+
+Informações:
+
+```
+allow_url_fopen=On - LFI pode ser possível
+allow_url_include=Off - RFI não vai ser possível
+display_errors=Off - não vamos ter saidas de erro
+include_path: .:/usr/share/pear:/usr/share/php - LFI só vai ser possível nesses paths
+file_uploads=On - podemos tentar fazer um PHPInfolfi e ganhar um shell na máquina
+```
+
+Bom, dessa máquina creio que seja isso, não consegui ver nenhum método de se pegar shell reverso nela... Até verificamos que temos apenas o usuário root com shell válido...
