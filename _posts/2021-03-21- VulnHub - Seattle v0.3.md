@@ -40,8 +40,6 @@ Full ports scan
 
 > Porta 80 -> Web
 
-> Porta 22 -> SSH
-
 ```
 Essa máquina vamos fazer de um modo diferente, ela tem várias vulnerabilidades já pré-configuradas pra gente treinara s habilidades em web, vou tentar demonstrar cada uma delas
 ```
