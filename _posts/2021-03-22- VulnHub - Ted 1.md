@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Ted 1"
-tags: [Linux, Medium]
+tags: [Linux, Medium, Wfuzz, Gobuster, Cookie Poisoning, BurpSuite, BurpSuite Repeater, Apt-Get, Sudo]
 categories: VulnHub OSWE
 ---
 
@@ -129,3 +129,91 @@ wfuzz -t 200 -c -z file,senhas_hash_prontas.txt --hs hash -d "username=admin&pas
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/brute.png)
 
 Achamos o hash... agora é só jogar na internet que iremos descobrir que ele é do admin, essa wordlist é relativamente famosa e todas as senhas estão por ai.
+
+Bom, agora fazemos o login na aplicação web com essa senha e usuário
+
+## Login Web
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/login.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/login1.png)
+
+Temos um LFI ali
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/login2.png)
+
+Mas não conseguimos fazer muita coisa com ele no momento.
+
+# Cookie Poisoning
+
+A única solução que consegui enxergar foi no **cookies.php**, algo me chamou atenção
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/cookies.png)
+
+`Cookies can be "persistent" or "session" cookies.`
+
+Certo, onde os cookies ficam salvos?
+
+O caminho "padrão" dele em páginas web é: **/var/lib/php/sessions/**
+
+E ele fica guardado no seguinte formato: **sess_cookie**
+
+Qual é o nosso cookie? Uma vez que ele é persistente?!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/cookies1.png)
+
+Ai está ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/cookies2.png)
+
+Jogamos a requisição para o BurpSuite, para conseguirmos trabalhar melhor
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/b.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/b1.png)
+
+Repeater
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/b2.png)
+
+## Testando RCE
+
+Bom, sabemos que podemos alterar esse cookie **user_pref** que ele vai aceitar sem problemas, vamos tentar injetar um código php ali pra testar se temos RCE
+
+```php
+<?php system("id")?>
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/b3.png)
+
+Show, temos RCE!
+
+## Reverse Shell
+
+Bom, agora é só pegarmos um reverse shell nessa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/b4.png)
+
+Obs: aqui tem que executar duas vezes, a primeira ele vai salvar no arquivo e a segunda executar
+
+# www-data -> Root
+
+Bom, vamos iniciar a escalação de privilégio
+
+Verificando o `sudo -l` desse www-data, vemos que ele pode executar o apt-get como root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/sudo.png)
+
+Pesquisamos como virar root com isso
+
+https://gtfobins.github.io/gtfobins/apt-get/
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/sudo1.png)
+
+E viramos
+
+```bash
+sudo apt-get update -o APT::Update::Pre-Invoke::=/bin/sh
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/sudo2.png)
