@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Raven 2"
-tags: [Linux, Medium]
+tags: [Linux, Medium, UDF, Wordpress, PHPMailer, BurpSuite, Curl, Linpeas, MySQL]
 categories: VulnHub OSWE
 ---
 
@@ -307,3 +307,47 @@ Opa! Senha do Mysql
 Opa! MySQL sendo executado como ROOT
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/lin3.png)
+
+## MySQL Local Privilege Escalation - UDF
+
+Mysql normalmente não é executado com permissões de root, isso nos abre a possibilidade de diversos pontos para escalação de privilégio nessa máquina, também se verificarmos a versão dele, é uma versão antiga
+
+5.5.60
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/lin4.png)
+
+Pesquisando por exploits, encontramos alguns que podemos utilizar para a escalação local de privilégio nessa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/mysql.png)
+
+A ideia aqui é explorar o User Defined Functions (UDF) do SQL que está sendo executado como root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/mysql1.png)
+
+É só seguirmos o que está previsto no exploit
+
+Compilamos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/comp.png)
+
+Acessamos o mysql com as credenciais de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/comp1.png)
+
+Adicionamos a library nos plugins do mysql
+R@v3nSecurity
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/comp2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/comp3.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/comp4.png)
+
+Agora criamos a função `do_system` pra podermos executar comandos na máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/comp5.png)
+
+Agora pegamos uma reverse shell
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/comp6.png)
+
