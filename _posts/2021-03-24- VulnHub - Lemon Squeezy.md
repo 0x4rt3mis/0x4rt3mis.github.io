@@ -68,11 +68,11 @@ Olhando o código fonte, vemos que ele está chamando o `lemonsqueezy`
 
 Alteramos o /etc/hosts pra podermos ver a webpage corretamente
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/hosts.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/hosts.png)
 
 Agora acessamos
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/wp2.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/wp2.png)
 
 Bom, fiz diversas enumerações no wordpress e não encontrei nada de extremamente vulnerável nele
 
@@ -82,9 +82,9 @@ Com o `wpscan` enumeramos algumas coisas
 wpscan --url http://lemonsqueezy/wordpress/ -e u --no-banner --no-update --api-token [....]
 ```
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/wp3.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/wp3.png)
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/wp4.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/wp4.png)
 
 Usuários encontrados: **oragen** e **lemon**, com eles podemos tentar algum tipo de brute force na máquina depois também. Tirando isso não encontrei nada de importante nesse wordpress
 
@@ -92,7 +92,7 @@ Usuários encontrados: **oragen** e **lemon**, com eles podemos tentar algum tip
 
 Enumeramos então esse /javascript
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/java.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/java.png)
 
 Gosbuster nele
 
@@ -100,11 +100,11 @@ Gosbuster nele
 gobuster dir -u http://lemonsqueezy/javascript/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x php -t 30
 ```
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/java1.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/java1.png)
 
 Acessamos esse /scriptaculous
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/java2.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/java2.png)
 
 Bom, não vou ficar batendo aqui pq é um rabbit hole
 
@@ -114,8 +114,23 @@ Bom, não vou ficar batendo aqui pq é um rabbit hole
 wpscan --url http://lemonsqueezy/wordpress --passwords /usr/share/seclists/Passwords/xato-net-10-million-passwords-100.txt --usernames lemon,orange
 ```
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/brute.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/brute.png)
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/brute1.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/brute1.png)
 
 Opa, encontramos um login e senha válido `Username: orange, Password: ginger`
+
+## Login Wordpress
+
+Entramos no Wordpress
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/login.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/login1.png)
+
+Verificamos um post interessante que tem o que parece ser uma senha, vamos salvar pra se precisarmos no futuro, usar ela
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/wp5.png)
+
+`n0t1n@w0rdl1st!`
+
