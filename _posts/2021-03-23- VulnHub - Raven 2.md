@@ -260,8 +260,6 @@ Temos RCE!
 
 Agora pesquisamos por exploit para ele
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/vendor2.png)
-
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/exp.png)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/exp1.png)
@@ -271,3 +269,41 @@ https://www.exploit-db.com/exploits/40974
 Baixamos eles para nossa máquina e tentamos utilizar, não sei por que ele não deu muito certo, depois com mais tempo eu debugo melhor isso.
 
 # Escalando Privilégio
+
+Navegando na máquina encontramos mais algumas flags
+
+Flag2
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/flag2.png)
+
+Flag3
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/flag3.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/flag33.png)
+
+## Linpeas
+
+Executamos o Linpeas para procurar por pontos para escalar privilégio
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/lin0.png)
+
+Baixamos na nossa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/lin.png)
+
+Executamos na máquina Raven
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/lin1.png)
+
+Executamos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/lin11.png)
+
+Opa! Senha do Mysql
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/lin2.png)
+
+Opa! MySQL sendo executado como ROOT
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/lin3.png)
