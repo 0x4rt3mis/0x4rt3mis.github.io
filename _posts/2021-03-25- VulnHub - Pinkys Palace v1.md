@@ -40,7 +40,9 @@ Full ports scan
 
 ### Verificamos que temos 3 portas abertas no servidor
 
-> Portas 8080 e 31337 -> Web
+> Porta 8080 -> Web
+
+> Porta 31337 -> Proxy?! Web?!
 
 > Porta 64666 -> SSH
 
@@ -91,3 +93,41 @@ wfuzz -t 200 -c -z file,/usr/share/wordlists/dirbuster/directory-list-2.3-small.
 ```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/wfuzz1.png)
+
+Bom, de cara assim não encontramos nada, mas partindo da premissa que isso é um proxy, devemos utilizar ele como proxy
+
+Com o curl podemos verificar isso
+
+```bash
+curl --proxy http://192.168.56.138:31337 127.0.0.1:8080
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/proxy.png)
+
+Setamos o proxy para essa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/proxy1.png)
+
+Agora acessamos e vemos que realmente temos outra página web ali
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/proxy2.png)
+
+### Gobuster Proxy
+
+Agora fazemos o fuzzing de diretórios através de um proxy
+
+```bash
+gobuster dir -u http://127.0.0.1:8080/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt --proxy http://192.168.56.138:31337
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/proxy3.png)
+
+Opa, achamos um novo diretório
+
+### /littlesecrets-main
+
+Acessamos ele para ver do que se trata
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/proxy4.png)
+
+Campo de login e senha, a primeira coisa que pensamos em fazer é alguma tentativa de bypassar esse login e senha 
