@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Blocky"
 tags: [Linux,Easy,Wordpress,WebShell,dccp,CVE-2017-6074,phpmyadmin,Wfuzz,Kernel,Linux Exploit Suggester]
-categories: HackTheBox
+categories: HackTheBox OSWE OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-blocky/Blocky_inicial.png)

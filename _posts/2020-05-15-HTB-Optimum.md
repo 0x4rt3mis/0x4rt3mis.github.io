@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Optimum"
 tags: [Windows,Easy,Local Exploit Suggester,Msfvenom,Impacket SMB,MS16-032,HFS]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-optimum/Opt_1.png)

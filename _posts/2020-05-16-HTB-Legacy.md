@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Legacy"
 tags: [Windows,Easy,Msfvenom,Metasploit Framework,MS08-067]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-legacy/Legacy_1.png)

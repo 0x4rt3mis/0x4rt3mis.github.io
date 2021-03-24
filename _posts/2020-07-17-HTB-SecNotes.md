@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - SecNotes"
 tags: [Windows,Medium,CSRF,SQLInjection,BurpSuite,BurpSuite Repeater,Wfuzz,Smbclient,Smbmap,Bash Windows,Winexe,Psexec,Windows Web Shell]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-secnotes/S_inicial.png)

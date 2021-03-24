@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Haircut"
 tags: [Linux,Medium,Linpeas,Kernel,Screen,Gobuster,Curl,BurpSuite,BurpSuite Repeater]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-haircut/H_inicial.png)

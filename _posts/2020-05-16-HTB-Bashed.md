@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Bashed"
 tags: [Linux,Easy,Linux Exploit Suggester,Wfuzz,CVE-2017-6074,dccp,LinEnum,Linpeas,Pspy]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-bashed/Bashed_inicial.png)

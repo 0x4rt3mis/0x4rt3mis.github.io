@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Bastion"
 tags: [Windows,Easy,Secretsdump,Impacket,Smbclient,Mount,Guestmount,SAM,Psexec,Smbmap]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-bastions/Bastion_inicial.png)

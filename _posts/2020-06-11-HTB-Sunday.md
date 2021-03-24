@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Sunday"
 tags: [Solaris,Easy,Finger,Wget,Sudoers,Patator,SSH Brute Force]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-sunday/S_inicial.png)

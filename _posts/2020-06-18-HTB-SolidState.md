@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - SolidState"
 tags: [Linux,Medium,James,Gobuster,Telnet,Thunderbird,Rbash,SSH No Profile,SSH -t,PSPY,PSPY Manual]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-solidstate/S_inicial.png)

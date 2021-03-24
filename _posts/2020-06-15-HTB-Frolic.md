@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Frolic"
 tags: [Linux,Easy,Gobuster,Metasploit Framework,PlaySMS,Ook!,Brainfuck,John,Fcrackzip,ROP,Buffer Overflow Linux,One_gadget,Pwntools,Ldd,Strings,Gdb]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-frolic/F_inicial.png)

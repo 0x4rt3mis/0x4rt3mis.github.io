@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Arctic"
 tags: [Windows,Easy,Coldfusion,Metasploit Framework,Windows Exploit Suggester,MS10-059,Certutil,Impacket SMB,Burpsuite,Unicorn,Meterpreter,MS10-092,Local Exploit Suggester]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-arctic/Arctic_1.png)

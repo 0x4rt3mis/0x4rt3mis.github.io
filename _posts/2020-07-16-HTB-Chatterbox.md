@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Chatterbox"
 tags: [Windows,Medium,Runas,Empire,Unicorn,Metasploit Framework,Meterpreter,Searchsploit,Nishang,PowerUp,Icacls,Start-Process,Achat,PortForwading,Psexec,Impacket]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-chatterbox/C_inicial.png)

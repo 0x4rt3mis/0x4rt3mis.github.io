@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Valentine"
 tags: [Linux,Easy,Heartbleed,Kernel,DirtyCow,Wfuzz,Xxd,Tmux]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-valentine/Valentine_inicial.png)

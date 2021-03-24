@@ -1,7 +1,7 @@
 ---
 title: "Hack The Box - Shocker"
 tags: [Linux,Easy,Shellshock,Metasploit Framework,BurpSuite,Wfuzz,Perl]
-categories: HackTheBox
+categories: HackTheBox OSCP
 ---
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-shocker/Shocker_inicial.png)
