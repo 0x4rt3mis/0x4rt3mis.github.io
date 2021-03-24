@@ -245,3 +245,114 @@ SQL Query: SELECT * FROM users WHERE ua='SQLI' ORDER BY 1 -- +'
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind9.png)
 
 Não mostrou mensagem de erro no log, ou seja, não é uma query válida
+
+Bom, SQLi Blind, é a mesma ideia do SQLi normal que estamos acostumados a fazer, mas temos que ir "adivinhando" caracter por caracter os dados, por isso leva um bom tempo pra ser feito, um bom blog que explica mais ou menos como funciona é esse: https://bentrobotlabs.wordpress.com/category/security/
+
+Aqui pra ganhar tempo (e porque também não dei conta de fazer na mão) vou usar o `sqlmap` pra extrair os dados desse banco de dados. Mais tarde quando conseguir fazer isso melhor, eu faço aqui a injeção blind.
+
+Demora muito tempo pra realizar essa extração, por ser blind ele é mais lento que o normal
+
+```bash
+
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/sqlmap.png)
+
+Aqui ele encontrou a vulnerabilidade no `User-Agent`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/sqlmap1.png)
+
+Por ser um TIME-BASED ele vai demorar um bom tempo para trazer os resultados
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/sqlmap2.png)
+
+Opa, achamos dois hashes e usuários, vamos fazer o brute force neles então pra ver se conseguimos adentrar a máquina
+
+Verificamos como utilizar o john para essa quebra de senha
+
+http://pentestmonkey.net/cheat-sheet/john-the-ripper-hash-formats
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/john.png)
+
+Realizamos a quebra dela
+
+```bash
+john --format=raw-md5 hashes.txt --wordlist=/usr/share/wordlists/rockyou.txt
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/john1.png)
+
+Beleza! Achamos uma senha
+
+**3pinkysaf33pinkysaf3 (pinkymanage)**
+
+Agora vamos tentar um SSH nessa máquina com esse usuário, uma vez que temos a porta 64666 aberta com o SSH, como foi vista na enumeração
+
+# pinkymanage -> pinky
+
+Entramos nela!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/ssh.png)
+
+Olhando pelas pastas web, encontramos um diretório que não haviamos encontrado antes, o **/var/www/html/littlesecrets-main/ultrasecretadminf1l35**
+
+Nele temos dois arquivos, um **note.txt** e um arquivo oculto **.ultrasecret**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/ssh1.png)
+
+Quando verificamos do que se trata é uma chave ssh em base64
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/ssh2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/ssh3.png)
+
+Agora verificamos quais usuários temos na máquina, possivelmente essa chave é do usuário **pinky**
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/ssh4.png)
+
+Passamos pra nossa máquina, e entramos como usuário **pinky** agora
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/ssh5.png)
+
+# pinky -> root
+
+Agora vamos iniciar a escalação de privilégio para o usuário root
+
+Usamos o Linpeas para verificar vulnerabilidades na máquina para escalação de privilégio
+
+https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/lin.png)
+
+Baixamos na nossa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/lin1.png)
+
+Agora executamos na máquina virtual
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/lin2.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/lin3.png)
+
+Encontramos um arquivo com `suid` habilitado na home do meu usuário
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/lin4.png)
+
+Verificamos do que se trata
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/lin5.png)
+
+Não conseguimos ver muito o que ele faz, mas vemos que temos um `segmentation fault` nele, ou seja, possivelmente vai ser uma exploração de Buffer Overflow nesse aplicativo que está rodando com permissões de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/lin6.png)
+
+Passamos esse arquivo para nossa máquina, pra podermos montar o exploit para ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/lin7.png)
+
+Ali na pasta do usuário também temos um arquivo de anotação
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/lin8.png)
+
+**Been working on this program to help me when I need to do administrator tasks sudo is just too hard to configure and I can never remember my root password! Sadly I'm fairly new to C so I was working on my printing skills because Im not sure how to implement shell spawning yet :(**
+
