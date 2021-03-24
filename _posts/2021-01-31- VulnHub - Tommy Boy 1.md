@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Tommy Boy 1"
-tags: [Linux,Medium,Wpscan,Gobuster,Wfuzz,FTP,Wfuzz,Brute Force,Wordpress,Web]
+tags: [Linux,Medium,Wpscan,Gobuster,FTP,Wfuzz,Brute Force,Wordpress,Web]
 categories: VulnHub OSCP
 ---
 

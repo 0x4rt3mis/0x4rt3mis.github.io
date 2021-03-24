@@ -1,6 +1,6 @@
 ---
 title: "Active Directory - Jenkins"
-tags: [Windows, Active Directory]
+tags: [Windows,Active Directory]
 categories: ActiveDirectory
 ---
 

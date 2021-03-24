@@ -1,6 +1,6 @@
 ---
 title: "Active Directory - Enumeração MSSQL - PowerUpSQL.ps1"
-tags: [Windows, Active Directory]
+tags: [Windows,Active Directory]
 categories: ActiveDirectory
 ---
 

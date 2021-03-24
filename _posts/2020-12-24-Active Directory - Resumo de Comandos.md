@@ -1,6 +1,6 @@
 ---
 title: "Active Directory - Resumo de Comandos"
-tags: [Windows, Active Directory]
+tags: [Windows,Active Directory]
 categories: ActiveDirectory Metodologias
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Active Directory - Resumo de Ferramentas"
-tags: [Windows, Active Directory]
+tags: [Windows,Active Directory]
 categories: ActiveDirectory Metodologias
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Active Directory - Explorando Trusts - Tickets"
-tags: [Windows, Active Directory]
+tags: [Windows,Active Directory]
 categories: ActiveDirectory
 ---
 
