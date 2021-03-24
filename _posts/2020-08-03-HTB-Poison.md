@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Poison"
-tags: [FreeBSD,Medium,Port Forwading,FIFO Port Forwading,BurpSuite,Phpinfolfi,PayloadAllTheThings]
+tags: [FreeBSD,Medium,Port Forwading,FIFO Port Forwading,BurpSuite,PhpinfoLFI,PayloadAllTheThings]
 categories: HackTheBox OSCP
 ---
 

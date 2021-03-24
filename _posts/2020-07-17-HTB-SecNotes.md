@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - SecNotes"
-tags: [Windows,Medium,SQLInjection,Burpsuite,Wfuzz,Psexec,Web]
+tags: [Windows,Medium,SQLInjection,BurpSuite,Wfuzz,Psexec,Web]
 categories: HackTheBox OSCP
 ---
 

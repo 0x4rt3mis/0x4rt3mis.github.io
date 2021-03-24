@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Unattended"
-tags: [Linux,Medium,SQLInjection,Blind SQLInjection,Burpsuite,Poison,Web]
+tags: [Linux,Medium,SQLInjection,Blind SQLInjection,BurpSuite,Poison,Web]
 categories: HackTheBox OSWE
 ---
 

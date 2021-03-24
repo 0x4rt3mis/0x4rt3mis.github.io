@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Symfonos 3"
-tags: [Linux,Medium,PSPY,Gobuster,ShellShock,Burpsuite,Burpsuite Repeater, Tcpdump, Wireshark, FTP, Python]
+tags: [Linux,Medium,PSPY,Gobuster,ShellShock,BurpSuite,BurpSuite Repeater, Tcpdump, Wireshark, FTP, Python]
 categories: VulnHub OSCP
 ---
 

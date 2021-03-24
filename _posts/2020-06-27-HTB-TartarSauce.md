@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - TartarSauce"
-tags: [Linux,Medium,Linpeas,Pspy,Gobuster,Wordpress,BurpSuite]
+tags: [Linux,Medium,Linpeas,PSPY,Gobuster,Wordpress,BurpSuite]
 categories: HackTheBox OSCP
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Friendzone"
-tags: [Linux,Easy,Aquatone,Linpeas,DNS,PHP Wrapper,Wfuzz,Pspy]
+tags: [Linux,Easy,Aquatone,Linpeas,DNS,PHP Wrapper,Wfuzz,PSPY]
 categories: HackTheBox OSCP
 ---
 

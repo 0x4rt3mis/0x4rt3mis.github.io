@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - LaCasaDePapel"
-tags: [Linux,Easy,Pspy,Web,Proxychain,FTP]
+tags: [Linux,Easy,PSPY,Web,Proxychain,FTP]
 categories: HackTheBox
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Redcross"
-tags: [Linux,Medium,Gobuster,XSS,PayloadAllTheThings,SQLInjection,Burpsuite,Brute Force,Metasploit,Buffer Overflow Linux]
+tags: [Linux,Medium,Gobuster,XSS,PayloadAllTheThings,SQLInjection,BurpSuite,Brute Force,Metasploit,Buffer Overflow Linux]
 categories: HackTheBox
 ---
 

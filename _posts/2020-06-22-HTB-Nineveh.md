@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Nineveh"
-tags: [Linux,Medium,Linux Exploit Suggester,Kernel,Pspy,Port Knocking,Linpeas,Linenum,Phpinfo LFI RCE,Brute Force,BurpSuite,Gobuster,Wfuzz]
+tags: [Linux,Medium,Linux Exploit Suggester,Kernel,PSPY,Port Knocking,Linpeas,Linenum,PhpinfoLFI,Brute Force,BurpSuite,Gobuster,Wfuzz]
 categories: HackTheBox OSCP
 ---
 
@@ -473,7 +473,7 @@ ps aux | grep knock
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-nineveh/N_knock.png)
 
-## Pspy - 2º Maneira
+## PSPY - 2º Maneira
 
 A 2º maneira a ser utilizada é o nosso amigo pspy
 
@@ -619,7 +619,7 @@ Rodamos ele na máquina e verificamos algo diferente... está sendo executado o 
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-nineveh/N_rep2.png)
 
-### Pspy - 2º Maneira
+### PSPY - 2º Maneira
 
 A 2º maneira a ser utilizada é o nosso amigo pspy
 

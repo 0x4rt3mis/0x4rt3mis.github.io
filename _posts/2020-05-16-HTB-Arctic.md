@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Arctic"
-tags: [Windows,Easy,Metasploit,Windows Exploit Suggester,Impacket,Burpsuite,Local Exploit Suggester]
+tags: [Windows,Easy,Metasploit,Windows Exploit Suggester,Impacket,BurpSuite,Local Exploit Suggester]
 categories: HackTheBox OSCP
 ---
 
@@ -157,13 +157,13 @@ Isso encontramos em `Settings -> Mapping`
 
 ### Vamos descobrir por que está dando erro
 
-#### Configuração do `Burpsuite`
+#### Configuração do `BurpSuite`
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-arctic/Arctic_b.png)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-arctic/Arctic_b2.png)
 
-#### Configuração do Metasploit Framework para passar pelo Burpsuite
+#### Configuração do Metasploit Framework para passar pelo BurpSuite
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/htb-arctic/Arctic_m3.png)
 

@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Curling"
-tags: [Linux,Easy,Web,Pspy]
+tags: [Linux,Easy,Web,PSPY]
 categories: HackTheBox
 ---
 

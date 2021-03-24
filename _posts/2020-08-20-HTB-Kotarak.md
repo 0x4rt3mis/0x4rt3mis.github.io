@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Kotarak"
-tags: [Linux,Hard,Wfuzz,Burpsuite,Web,Gobuster,Metasploit,Impacket]
+tags: [Linux,Hard,Wfuzz,BurpSuite,Web,Gobuster,Metasploit,Impacket]
 categories: HackTheBox
 ---
 

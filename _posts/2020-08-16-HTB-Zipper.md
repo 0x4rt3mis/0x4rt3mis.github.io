@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Zipper"
-tags: [Linux,Hard,Web,Burpsuite,Gobuster]
+tags: [Linux,Hard,Web,BurpSuite,Gobuster]
 categories: HackTheBox OSWE
 ---
 

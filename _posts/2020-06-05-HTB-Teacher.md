@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Teacher"
-tags: [Linux,Easy,Web,Wffuz,Brute Force,BurpSuite,Pspy]
+tags: [Linux,Easy,Web,Wffuz,Brute Force,BurpSuite,PSPY]
 categories: HackTheBox
 ---
 

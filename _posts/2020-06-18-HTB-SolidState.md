@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - SolidState"
-tags: [Linux,Medium,Gobuster,Pspy]
+tags: [Linux,Medium,Gobuster,PSPY]
 categories: HackTheBox OSCP
 ---
 

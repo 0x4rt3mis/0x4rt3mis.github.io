@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Stratosphere"
-tags: [Linux,Medium,Gobuster,Brute Force,Forward-Shell,Burpsuite,Web]
+tags: [Linux,Medium,Gobuster,Brute Force,Forward-Shell,BurpSuite,Web]
 categories: HackTheBox
 ---
 

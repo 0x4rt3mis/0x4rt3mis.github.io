@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Sniper"
-tags: [Windows,Medium,Gobuster,Burpsuite,Impacket,Nishang,Port Forwading,Brute Force,Psexec]
+tags: [Windows,Medium,Gobuster,BurpSuite,Impacket,Nishang,Port Forwading,Brute Force,Psexec]
 categories: HackTheBox
 ---
 
