@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Lemon Squeezy"
-tags: [Linux, Medium, Gobuster, Wordpress, Phpmyadmin, Cron]
+tags: [Linux,Medium,Gobuster,Wordpress,Web]
 categories: VulnHub OSCP
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - NullByte"
-tags: [Linux, Medium, Gobuster, Wfuzz, PHPMyAdmin, SQLInjection, SQLMap, SUID, Linpeas, John, Hydra, Bash Brute Force, BurpSuite, Repeater, Exif, Exiftool]
+tags: [Linux,Medium,Gobuster,Wfuzz,SQLInjection,Linpeas,Brute Force,BurpSuite,Web]
 categories: VulnHub OSCP
 ---
 

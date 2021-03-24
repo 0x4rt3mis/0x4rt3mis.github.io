@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Symfonos 4"
-tags: [Linux, Medium, Serialization, Python, Pyckles, LFI, SSH Log Poison, Wfuzz, Gobuster, Find, Chisel, Socat, Port Forwading, BurpSuite]
+tags: [Linux,Medium,Deserialization,Poison,Wfuzz,Gobuster,Port Forwading,BurpSuite,Web]
 categories: VulnHub
 ---
 

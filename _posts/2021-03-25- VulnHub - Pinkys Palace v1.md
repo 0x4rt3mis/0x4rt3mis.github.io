@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Pinkys Palace v1"
-tags: [Linux, Medium, Blind SQLi, Wfuzz, Gobuster, Curl, Upstream Proxy, BurpSuite, BurpSuite Repeater, Buffer Overflow Linux]
+tags: [Linux,Medium,SQLinjection,Wfuzz,Gobuster,Upstream Proxy,BurpSuite,Buffer Overflow Linux]
 categories: VulnHub OSCP
 ---
 

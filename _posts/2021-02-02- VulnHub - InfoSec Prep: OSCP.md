@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - InfoSec Prep: OSCP"
-tags: [Linux, Easy, Gobuster, Bash SUID, lxd, Linpeas]
+tags: [Linux,Easy,Gobuster,Linpeas,Web]
 categories: VulnHub OSCP
 ---
 

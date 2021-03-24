@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Ted 1"
-tags: [Linux, Medium, Wfuzz, Gobuster, Cookie Poisoning, BurpSuite, BurpSuite Repeater, Apt-Get, Sudo]
+tags: [Linux,Medium,Wfuzz,Gobuster,Poison,BurpSuite,Web]
 categories: VulnHub OSWE
 ---
 

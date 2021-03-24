@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Tommy Boy 1"
-tags: [Linux, Medium, Wpscan, Gobuster, Wfuzz, Exiftool, Binwalk, FTP, Wfuzz User Agent, Wfuzz Brute Force, Crunch, Fcrackzip, Wordpress, Magic Number, Find]
+tags: [Linux,Medium,Wpscan,Gobuster,Wfuzz,FTP,Wfuzz,Brute Force,Wordpress,Web]
 categories: VulnHub OSCP
 ---
 

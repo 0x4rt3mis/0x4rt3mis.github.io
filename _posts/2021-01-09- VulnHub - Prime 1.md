@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Prime 1"
-tags: [Linux,Easy,Kernel,BurpSuite,Wfuzz,Gobuster,4.10.0-28-generic,Wordpress,Linpeas]
+tags: [Linux,Easy,Kernel,BurpSuite,Wfuzz,Gobuster,Wordpress,Linpeas,Web]
 categories: VulnHub OSCP
 ---
 

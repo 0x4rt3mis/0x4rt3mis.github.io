@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - DerpNStink 1"
-tags: [Linux, Easy, Gobuster, PhpMyAdmin, Worpdress, BurpSuite, Wpscan, Metasploit Framework, Slideshow-gallery, John, Tcpdump, Wireshark]
+tags: [Linux,Easy,Gobuster,Worpdress,BurpSuite,Metasploit,Wireshark,Web,Brute Force]
 categories: VulnHub OSCP
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - BrainPain 1"
-tags: [Linux, Medium]
+tags: [Linux,Medium]
 categories: VulnHub OSCP
 ---
 

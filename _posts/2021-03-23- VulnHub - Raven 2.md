@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Raven 2"
-tags: [Linux, Medium, UDF, Wordpress, PHPMailer, BurpSuite, Curl, Linpeas, MySQL]
+tags: [Linux,Medium,Wordpress,BurpSuite,Linpeas,Web]
 categories: VulnHub OSWE
 ---
 

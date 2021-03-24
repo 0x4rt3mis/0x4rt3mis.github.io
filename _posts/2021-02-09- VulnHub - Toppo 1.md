@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Toppo 1"
-tags: [Linux, Easy, Linpeas, Gobuster, Mawk, John, Python SUID]
+tags: [Linux,Easy,Linpeas,Gobuster,Brute Force]
 categories: VulnHub OSCP
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Homeless 1"
-tags: [Linux, Medium, Gobuster, BurpSuite, BurpSuite Repeater, Wfuzz, Colisão MD5, Session Hijacking, Hydra, Cron]
+tags: [Linux,Medium,Gobuster,BurpSuite,Wfuzz,Colisão MD5,Brute Force]
 categories: VulnHub OSWE
 ---
 

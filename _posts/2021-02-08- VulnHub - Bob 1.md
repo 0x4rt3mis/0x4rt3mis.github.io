@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Bob 1"
-tags: [Linux, Easy, GPG, Robots, Gobuster, Sudo]
+tags: [Linux,Easy,Web,Gobuster,Sudo]
 categories: VulnHub OSCP
 ---
 

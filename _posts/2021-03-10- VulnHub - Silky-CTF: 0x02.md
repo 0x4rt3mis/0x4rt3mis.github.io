@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Silky-CTF: 0x02"
-tags: [Linux, Medium, Buffer Overflow Linux, Strings, BurpSuite, BurpSuite Repeater]
+tags: [Linux,Medium,Buffer Overflow Linux,BurpSuite]
 categories: VulnHub OSWE
 ---
 

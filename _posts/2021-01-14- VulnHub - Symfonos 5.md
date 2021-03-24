@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Symfonos 5"
-tags: [Linux, Medium, LDAP, LFI, RFI, BurpSuite, BurpSuite Repeater, DPKG, GTFobins, Sudo, FPM, Docker, Gobuster]
+tags: [Linux,Medium,LDAP,BurpSuite,Web,Gobuster]
 categories: VulnHub OSCP
 ---
 

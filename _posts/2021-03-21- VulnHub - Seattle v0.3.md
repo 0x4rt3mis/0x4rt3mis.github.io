@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Seattle v0.3"
-tags: [Linux, Medium, Wfuzz Brute Force, BurpSuite, BurpSuite Intruder, BurpSuite Repeater, Gobuster, XSS, SQLi, SQLMap, John]
+tags: [Linux,Medium,Brute Force,BurpSuite,Gobuster,XSS,SQLinjection,Brute Force]
 categories: VulnHub OSWE
 ---
 

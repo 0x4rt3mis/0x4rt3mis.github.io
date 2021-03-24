@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Symfonos 1"
-tags: [Linux,Easy,SMTP Poisoning,Log Poison,Wordpress,Gobuster,LFI,Smbclient,Path]
+tags: [Linux,Easy,Poison,Wordpress,Gobuster,Web]
 categories: VulnHub OSCP
 ---
 

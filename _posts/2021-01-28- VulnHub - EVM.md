@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - EVM"
-tags: [Linux, Easy, WordPress, WPForce, Wfuzz, BurpSuite, Wpscan, Metasploit, Linpeas, Nullinux, Smbclient, SMBMap, Nslookup]
+tags: [Linux,Easy,Wordpress,Wfuzz,BurpSuite,Metasploit,Linpeas]
 categories: VulnHub OSCP
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - GoldenEye 1"
-tags: [Linux, Medium, CC, Moodle, Kernel, Searchsploit, BurpSuite, Wfuzz, Gobuster, SMTP, Hydra, Msfconsole, Metasploit Framework, BurpSuite Proxy]
+tags: [Linux,Medium,Web,Kernel,BurpSuite,Wfuzz,Gobuster,Metasploit,BurpSuite]
 categories: VulnHub OSCP
 ---
 
