@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - LaCasaDePapel"
-tags: [Linux,Easy,Pspy,SSH Proxy,Certificado SSL,OpenSSL,LFI,Vsftd 2.3.4,PsyShell,Proxychain,FoxProxy]
+tags: [Linux,Easy,Pspy,Web,Proxychain,FTP]
 categories: HackTheBox
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Ypuffy"
-tags: [FreeBSD,Medium,Wireshark,Ldap,Ldap Script,namingContexts,Smbclient,Smbclient Hash,Puttygen,.PPK,Linpeas,Doas,CA,SSH Certificate,SSH-Keygen,Xorg]
+tags: [FreeBSD,Medium,Wireshark,Linpeas,Web]
 categories: HackTheBox
 ---
 

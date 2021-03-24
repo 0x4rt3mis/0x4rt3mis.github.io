@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Poison"
-tags: [FreeBSD,Medium,SSH Proxy Socks,SSH Konani,Port Forwading,FIFO Port Forwading,VNC Viewer,VNC Passwd,SCP,CyberChef,Log Poisoning,Apache Poisoning,BurpSuite,BurpSuite Repeater,Phpinfolfi,PayloadAllTheThings]
+tags: [FreeBSD,Medium,Port Forwading,FIFO Port Forwading,BurpSuite,Phpinfolfi,PayloadAllTheThings]
 categories: HackTheBox OSCP
 ---
 

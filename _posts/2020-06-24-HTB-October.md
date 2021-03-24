@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - October"
-tags: [Linux,Medium,Buffer Overflow Linux,Buffer Overflow,Gdb,Gef,Gobuster,OctoberCMS,ASLR,Ret2libc,Strings,Ldd]
+tags: [Linux,Medium,Buffer Overflow Linux]
 categories: HackTheBox
 ---
 

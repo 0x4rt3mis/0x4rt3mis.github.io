@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Aragog"
-tags: [Linux,Medium,Wordpress,Wp-login.php Listener,Vsftpd 3.0.3,Gobuster,BurpSuite,LFISuite,BurpSuite Intruder,BurpSuite Repeater,XXE Exploit,PayloadAllTheThings]
+tags: [Linux,Medium,Wordpress,FTP,Gobuster,BurpSuite,PayloadAllTheThings]
 categories: HackTheBox
 ---
 

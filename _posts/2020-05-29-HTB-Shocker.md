@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Shocker"
-tags: [Linux,Easy,Shellshock,Metasploit Framework,BurpSuite,Wfuzz,Perl]
+tags: [Linux,Easy,Shellshock,Metasploit,BurpSuite,Wfuzz]
 categories: HackTheBox OSCP
 ---
 

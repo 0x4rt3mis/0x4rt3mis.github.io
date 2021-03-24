@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Bounty"
-tags: [Windows,Easy,Merlin,Unicorn,Meterpreter,Nishang,Gobuster,RFI,BurpSuite,BurpSuite Intruder,Config RCE,Certutil,JuicyPotato,Local Exploit Suggester, Schelevator MS10-092,Metasploit Framework]
+tags: [Windows,Easy,Merlin,Unicorn,Meterpreter,Nishang,Gobuster,BurpSuite,JuicyPotato,Local Exploit Suggester,Metasploit]
 categories: HackTheBox OSCP
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - SolidState"
-tags: [Linux,Medium,James,Gobuster,Telnet,Thunderbird,Rbash,SSH No Profile,SSH -t,PSPY,PSPY Manual]
+tags: [Linux,Medium,Gobuster,Pspy]
 categories: HackTheBox OSCP
 ---
 

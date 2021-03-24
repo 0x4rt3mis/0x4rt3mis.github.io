@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Writeup"
-tags: [Linux,Easy,CMS Made Simple,Pspy,Linpeas]
+tags: [Linux,Easy,Web,Pspy,Linpeas]
 categories: HackTheBox
 ---
 

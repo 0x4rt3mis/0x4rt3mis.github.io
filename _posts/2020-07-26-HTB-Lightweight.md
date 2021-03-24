@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Lightweight"
-tags: [Linux,Medium,Ldap,Ldapenum,Ldapsearch,Tcpdump,Capabilities,Tcpdump Capabilities,Wireshark,7z2jhon,John,Openssl,Openssl Capabilities,Passwd,Sudoers]
+tags: [Linux,Medium,Capabilities,Wireshark,Brute Force]
 categories: HackTheBox
 ---
 

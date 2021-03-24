@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Bastard"
-tags: [Windows,Medium,MS16-014,MS10-051,Certutil,Wfuzz,Drupal,Drupalgeddon2,Drupalgeddon3,Local Exploit Suggester,Msfvenom,Meterpreter,Dropescan,BurpSuite,Nishang,Sherlock,JuicyPotato]
+tags: [Windows,Medium,Wfuzz,Web,Local Exploit Suggester,Metasploit,BurpSuite,Nishang,JuicyPotato]
 categories: HackTheBox OSCP
 ---
 

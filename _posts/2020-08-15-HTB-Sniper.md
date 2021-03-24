@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Sniper"
-tags: [Windows,Medium,Gobuster,LFI,RFI,BurpSuite,BurpSuite Repeater,Impacket-Smb Server,Constrained Mode,Nishang,CHM,SMB Config,UTF-16LE,PHPSSESID,Runas,ConvertTo-SecureString,WinRM,Chisel,Port Forwading,Socks Proxy,Proxychains,Out-CHM.ps1,Comando,HTML Help Workshop,Responder,John,Psexec]
+tags: [Windows,Medium,Gobuster,Burpsuite,Impacket,Nishang,Port Forwading,Brute Force,Psexec]
 categories: HackTheBox
 ---
 

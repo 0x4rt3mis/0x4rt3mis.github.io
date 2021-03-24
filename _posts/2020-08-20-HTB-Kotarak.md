@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Kotarak"
-tags: [Linux,Hard,Wfuzz,BurpSuite,BurpSuite Repeater,Tomcat,Gobuster,Metaploit Framework,Msfvenom,Wget 1.16,NTDS,Impacket,Secretsdump,SAM,SYSTEM,Authbind]
+tags: [Linux,Hard,Wfuzz,Burpsuite,Web,Gobuster,Metasploit,Impacket]
 categories: HackTheBox
 ---
 

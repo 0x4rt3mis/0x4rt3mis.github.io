@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Nineveh"
-tags: [Linux,Medium,eBPF_verifier,CVE 2017-16995,Linux Exploit Suggester,Kernel,Chkrootkit,Pspy,Proccess Monitor Manual,Port Knocking,Linpeas,Linenum,Knockd,Mail,Strings,Binwalk,Phpinfo LFI RCE,LFI,phpLiteAdmin v1.9,Hydra,BurpSuite,BurpSuite Repeater,Vhost Enumeration,Gobuster,Wfuzz]
+tags: [Linux,Medium,Linux Exploit Suggester,Kernel,Pspy,Port Knocking,Linpeas,Linenum,Phpinfo LFI RCE,Brute Force,BurpSuite,Gobuster,Wfuzz]
 categories: HackTheBox OSCP
 ---
 

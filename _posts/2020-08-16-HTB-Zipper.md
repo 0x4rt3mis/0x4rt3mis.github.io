@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Zipper"
-tags: [Linux,Hard,API,Zabbix,SUID,Bit SUID,Strings,Systemd,Services,Curl,BurpSuite,BurpSuite Repeater,Zabbix API,Searchsploit,Shell Estável,Gobuster]
+tags: [Linux,Hard,Web,Burpsuite,Gobuster]
 categories: HackTheBox OSWE
 ---
 

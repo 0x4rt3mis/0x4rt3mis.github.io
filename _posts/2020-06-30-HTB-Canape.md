@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Canape"
-tags: [Linux,Medium,Gobuster,CouchDB,Wfuzz,Git,Pickle,Python Serialization,Flask,Linpeas,Sudo,Pip Install,Gtfobins]
+tags: [Linux,Medium,Gobuster,Wfuzz,Deserialization,Linpeas]
 categories: HackTheBox
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Swagshop"
-tags: [Linux,Easy,Webshell,Magento,Froghop,Vi]
+tags: [Linux,Easy,Web]
 categories: HackTheBox OSCP
 ---
 

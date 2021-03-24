@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Querier"
-tags: [Windows,Medium,Psexec,PowerUp,Smbmap,Smbclient,Group Policies,Gpp-decrypt,Oletools,Xlms,Macros,MSSQL,Hash Net-NTLMv2,Responder,John,xp_cmdshell,Impacket,Nishang,Smbserver,Winrm,Service Abuse]
+tags: [Windows,Medium,Psexec,PowerUp,Brute Force,Impacket,Nishang]
 categories: HackTheBox
 ---
 

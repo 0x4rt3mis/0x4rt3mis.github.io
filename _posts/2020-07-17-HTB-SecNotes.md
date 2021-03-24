@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - SecNotes"
-tags: [Windows,Medium,CSRF,SQLInjection,BurpSuite,BurpSuite Repeater,Wfuzz,Smbclient,Smbmap,Bash Windows,Winexe,Psexec,Windows Web Shell]
+tags: [Windows,Medium,SQLInjection,Burpsuite,Wfuzz,Psexec,Web]
 categories: HackTheBox OSCP
 ---
 

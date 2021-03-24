@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - FluxCapacitor"
-tags: [Linux,Medium,Sudo,Wfuzz Parametros,Wfuzz Chars,Gobuster,WAF,BurpSuite,BurpSuite Repeater,Msfvenom]
+tags: [Linux,Medium,Wfuzz,Gobuster,WAF,BurpSuite,Mestasploit]
 categories: HackTheBox
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Enterprise"
-tags: [Linux,Medium,Gobuster,Wpscan,Joomlavs,Joomla,Wordpress,SQLInjection,Sqlmap,BurpSuite,Metasploit Framework,Meterpreter,Container,Docker,Chisel,Reverse Port Forwading,Socks Procks Chisel,Pivoting,Buffer Overflow Linux,Ret2libc,Pwn,Gdb]
+tags: [Linux,Medium,Gobuster,Wordpress,SQLInjection,Burpsuite,Metasploit,Reverse Port Forwading,Pivoting,Buffer Overflow Linux,Web]
 categories: HackTheBox
 ---
 

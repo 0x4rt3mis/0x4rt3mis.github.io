@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Apocalyst"
-tags: [Linux,Medium,WordPress,BurpSuite,BurpSuite Repeater,Hydra,Wfuzz,Gobuster,Cewl,Wpscan,Steghide,Linpeas,Passwd]
+tags: [Linux,Medium,Web,WordPress,BurpSuite,Hydra,Wfuzz,Brute Force,Gobuster,Linpeas]
 categories: HackTheBox
 ---
 

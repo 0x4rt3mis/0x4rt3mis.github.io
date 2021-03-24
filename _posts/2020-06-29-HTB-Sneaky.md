@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Sneaky"
-tags: [Linux,Medium,Gobuster,SNMP,IPv6,SSH IPv6,MIB,Snmpwalk,SQLI,Sqlmap,BurpSuite,BurpSuite Repeater,Enyx,Gdb,Buffer Overflow Linux,NX Disabled]
+tags: [Linux,Medium,Gobuster,IPv6,BurpSuite,Buffer Overflow Linux]
 categories: HackTheBox
 ---
 

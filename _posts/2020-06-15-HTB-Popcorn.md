@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Popcorn"
-tags: [Linux,Medium,MOTD,Gobuster,DirtyCow,Torrent Hoster,RFI,Web Shell,BurpSuite,BurpSuite Repeater,Magic Number]
+tags: [Linux,Medium,Web,Gobuster,BurpSuite]
 categories: HackTheBox OSWE OSCP
 ---
 

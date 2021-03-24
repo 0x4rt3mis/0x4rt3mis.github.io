@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Netmon"
-tags: [Windows,Easy,PRTG,UTF-16LE,Nishang,PSExec]
+tags: [Windows,Easy,Web,Nishang,PSExec]
 categories: HackTheBox
 ---
 

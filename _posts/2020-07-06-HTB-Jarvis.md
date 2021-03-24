@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Jarvis"
-tags: [Linux,Medium,Systemd,Suid,Linpeas,Sudo -l,Gobuster,Wfuzz,BurpSuite,BurpSuite Repeater,SQLInjection,PhpMyAdmin,SQLMAP,Gtfobins]
+tags: [Linux,Medium,Linpeas,Gobuster,Wfuzz,BurpSuite,SQLInjection]
 categories: HackTheBox OSCP
 ---
 

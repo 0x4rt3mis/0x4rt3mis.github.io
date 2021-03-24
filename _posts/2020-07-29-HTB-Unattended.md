@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Unattended"
-tags: [Linux,Medium,Wfuzz,VHOST Fuzzing,SQLInjection,Blind SQLInjection,SQLMap,Nginx,Traversal Path Ngnix,BurpSuite,BurpSuite Repeater,Log Poison PHP,PHP Session Poison,Socat,MySQL,Grub,Zcat,Cpio,Initrd,Strace,Uinitrd,Rootkit,Find]
+tags: [Linux,Medium,SQLInjection,Blind SQLInjection,Burpsuite,Poison,Web]
 categories: HackTheBox OSWE
 ---
 

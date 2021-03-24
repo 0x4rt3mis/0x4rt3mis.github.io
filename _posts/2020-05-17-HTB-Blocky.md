@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Blocky"
-tags: [Linux,Easy,Wordpress,WebShell,dccp,CVE-2017-6074,phpmyadmin,Wfuzz,Kernel,Linux Exploit Suggester]
+tags: [Linux,Easy,Wordpress,Web,Wfuzz,Kernel,Linux Exploit Suggester]
 categories: HackTheBox OSWE OSCP
 ---
 

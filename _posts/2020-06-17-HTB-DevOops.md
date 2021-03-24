@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - DevOops"
-tags: [Linux,Medium,Gobuster,Git,XXE Exploit,PayloadAllTheThings]
+tags: [Linux,Medium,Gobuster,PayloadAllTheThings]
 categories: HackTheBox
 ---
 

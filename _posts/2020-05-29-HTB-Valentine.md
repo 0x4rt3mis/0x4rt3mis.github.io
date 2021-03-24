@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Valentine"
-tags: [Linux,Easy,Heartbleed,Kernel,DirtyCow,Wfuzz,Xxd,Tmux]
+tags: [Linux,Easy,Heartbleed,Kernel,Wfuzz]
 categories: HackTheBox OSCP
 ---
 

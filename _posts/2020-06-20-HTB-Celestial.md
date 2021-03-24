@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Celestial"
-tags: [Linux,Medium,BurpSuite,BurpSuite Repeater,BurpSuite Decoder,NodeJS,Node Deserealization,PSPY]
+tags: [Linux,Medium,BurpSuite,Deserealization,Pspy,Web]
 categories: HackTheBox OSWE
 ---
 

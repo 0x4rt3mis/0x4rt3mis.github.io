@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Networked"
-tags: [Linux,Easy,Nohup,RFI,Webshell,Sudo]
+tags: [Linux,Easy,Web]
 categories: HackTheBox OSCP
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - TartarSauce"
-tags: [Linux,Medium,Tar,Linpeas,Pspy,Monstra CMS,Gobuster,Wpscan,Wfuzz WP Plugin,Plugin Gwolle,Setuid,BurpSuite,BurpSuite Match and Replace]
+tags: [Linux,Medium,Linpeas,Pspy,Gobuster,Wordpress,BurpSuite]
 categories: HackTheBox OSCP
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Stratosphere"
-tags: [Linux,Medium,Gobuster,Hydra,Struts,Apache Struts,Forward-Shell,Firewall Bypass,BurpSuite,BurpSuite Repeater,CVE-2017-5638,Python,Python Path Hijacking,Python Input,Eval]
+tags: [Linux,Medium,Gobuster,Brute Force,Forward-Shell,Burpsuite,Web]
 categories: HackTheBox
 ---
 

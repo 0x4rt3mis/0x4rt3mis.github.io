@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Haircut"
-tags: [Linux,Medium,Linpeas,Kernel,Screen,Gobuster,Curl,BurpSuite,BurpSuite Repeater]
+tags: [Linux,Medium,Linpeas,Kernel,Gobuster,BurpSuite,Web]
 categories: HackTheBox OSCP
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Tenten"
-tags: [Linux,Medium,WordPress,Wpscan,sshng2john,John,Sudo,Job-Manager,CVE-2015-6668,Steghide]
+tags: [Linux,Medium,Wordpress,John,Brute Force]
 categories: HackTheBox
 ---
 

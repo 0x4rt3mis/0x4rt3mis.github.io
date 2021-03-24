@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Curling"
-tags: [Linux,Easy,Snap,Joomla,CyberChef,XXD,Curl,Pspy]
+tags: [Linux,Easy,Web,Pspy]
 categories: HackTheBox
 ---
 

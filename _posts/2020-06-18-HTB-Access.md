@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Access"
-tags: [Windows,Easy,Nishang,Nishang One-Line,JAWS,Gobuster,MDB,John,PST,Zip,Mbox,Telnet,Runas,Lnk,Keepass,Keepassx,Kpcli,Empire]
+tags: [Windows,Easy,Web,Nishang,JAWS,Gobuster,Brute Force,Empire]
 categories: HackTheBox
 ---
 

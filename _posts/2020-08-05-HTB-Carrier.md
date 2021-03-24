@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Carrier"
-tags: [Linux,Medium,Snmpwalk,Gobuster,BurpSuite Repeater,BurpSuite,Quagga,BGP,Rota,FTP,BGP Hijacking,Tcpdump,Wireshark]
+tags: [Linux,Medium,Gobuster,BurpSuite,Wireshark,BGP Hijacking]
 categories: HackTheBox
 ---
 

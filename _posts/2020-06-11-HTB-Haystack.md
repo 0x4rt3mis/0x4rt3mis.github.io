@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Haystack"
-tags: [Linux,Easy,Logastash,Kibana,Elastic,SSH Konami,Port Forwading,JQ,Strings,Linpeas]
+tags: [Linux,Easy,Web,SSH Konami,Port Forwading,Linpeas]
 categories: HackTheBox
 ---
 

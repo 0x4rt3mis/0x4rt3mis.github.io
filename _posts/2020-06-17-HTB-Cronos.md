@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Cronos"
-tags: [Linux,Medium,BurpSuite,BurpSuite Repeater,BurpSuite Match and Replace,SQL Injection,Gobuster,DNS Zone Transfer,CronJob]
+tags: [Linux,Medium,BurpSuite,SQL Injection,Gobuster,DNS,CronJob,Web]
 categories: HackTheBox OSCP
 ---
 

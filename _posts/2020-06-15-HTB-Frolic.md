@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Frolic"
-tags: [Linux,Easy,Gobuster,Metasploit Framework,PlaySMS,Ook!,Brainfuck,John,Fcrackzip,ROP,Buffer Overflow Linux,One_gadget,Pwntools,Ldd,Strings,Gdb]
+tags: [Linux,Easy,Gobuster,Metasploit,John,Buffer Overflow Linux]
 categories: HackTheBox OSCP
 ---
 

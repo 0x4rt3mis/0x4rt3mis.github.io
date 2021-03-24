@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Jeeves"
-tags: [Windows,Medium,Gobuster,Askjeeves,Jeeves,Jenkins,Nishang,Groovy Script,RottenPotato,JuicyPotato,SeImpersonatePrivilege,Meterpreter,Msfconsole,Unicorn,Incognito,Pass The Hash,PTH,Impacket Smb Server,New-PSDrive,Kdbx,Keepassx,John,Keepass2john]
+tags: [Windows,Medium,Gobuster,Jenkins,Nishang,JuicyPotato,Metasploit,Unicorn,Pass The Hash,Impacket,Web]
 categories: HackTheBox
 ---
 

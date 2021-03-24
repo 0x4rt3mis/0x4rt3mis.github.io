@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Teacher"
-tags: [Linux,Easy,Moodle,Wffuz,Wfuzz Brute Force,BurpSuite Intruder,Pspy,Mysql,BurpSuite,Seclists]
+tags: [Linux,Easy,Web,Wffuz,Brute Force,BurpSuite,Pspy]
 categories: HackTheBox
 ---
 

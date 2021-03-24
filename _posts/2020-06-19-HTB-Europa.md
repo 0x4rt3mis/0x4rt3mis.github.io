@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Europa"
-tags: [Linux,Medium,PSPY,Cronjob,PHP Regex,BurpSuite,BurpSuite Repeater,SQLMap,SQLInjection]
+tags: [Linux,Medium,Pspy,Cronjob,BurpSuite,SQLInjection,Web]
 categories: HackTheBox
 ---
 

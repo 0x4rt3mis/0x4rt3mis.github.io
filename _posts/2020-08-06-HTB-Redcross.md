@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Redcross"
-tags: [Linux,Medium,Gobuster,Vhost Fuzzing,XSS,Cross-Site-Scripting,PayloadAllTheThings,SQLInjection,SQLI,SQLMap,BurpSuite,John,Haraka,Metasploit Framework,BurpSuite Repeater,PSQL,Unixusrmgr,Sudoers,Buffer Overflow Linux,Buffer Overflow x64,GDB,Gef]
+tags: [Linux,Medium,Gobuster,XSS,PayloadAllTheThings,SQLInjection,Burpsuite,Brute Force,Metasploit,Buffer Overflow Linux]
 categories: HackTheBox
 ---
 

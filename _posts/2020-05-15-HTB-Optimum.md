@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Optimum"
-tags: [Windows,Easy,Local Exploit Suggester,Msfvenom,Impacket SMB,MS16-032,HFS]
+tags: [Windows,Easy,Local Exploit Suggester,Metasploit,Impacket]
 categories: HackTheBox OSCP
 ---
 

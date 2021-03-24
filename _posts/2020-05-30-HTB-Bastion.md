@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Bastion"
-tags: [Windows,Easy,Secretsdump,Impacket,Smbclient,Mount,Guestmount,SAM,Psexec,Smbmap]
+tags: [Windows,Easy,Impacket,Psexec]
 categories: HackTheBox OSCP
 ---
 

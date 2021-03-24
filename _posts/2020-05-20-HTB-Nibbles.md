@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Nibbles"
-tags: [Linux,Easy,Nibbleblog,Webshell,Metasploit Framework,Meterpreter]
+tags: [Linux,Easy,Web,Metasploit]
 categories: HackTheBox OSCP
 ---
 
