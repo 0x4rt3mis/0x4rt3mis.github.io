@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Tenten"
-tags: [Linux,Medium,Wordpress,John,Brute Force]
+tags: [Linux,Medium,Wordpress,Brute Force]
 categories: HackTheBox
 ---
 

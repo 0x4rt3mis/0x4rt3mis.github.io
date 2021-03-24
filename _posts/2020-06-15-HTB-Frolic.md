@@ -1,6 +1,6 @@
 ---
 title: "Hack The Box - Frolic"
-tags: [Linux,Easy,Gobuster,Metasploit,John,Buffer Overflow Linux]
+tags: [Linux,Easy,Gobuster,Metasploit,Brute Force,Buffer Overflow Linux]
 categories: HackTheBox OSCP
 ---
 
