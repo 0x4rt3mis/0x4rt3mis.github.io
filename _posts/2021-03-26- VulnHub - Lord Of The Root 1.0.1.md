@@ -432,6 +432,10 @@ Agora ganhamos o shell de root
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ms5.png)
 
+Pegamos a flag de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/flag.png)
+
 # Bônus
 
 Verificando o cron dele, vemos que ele troca o arquivo entre as pastas a cada 3 minutos
