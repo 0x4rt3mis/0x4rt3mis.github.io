@@ -1,5 +1,5 @@
 ---
-title: "VulnHub - Lord Of The Root 1.0.1"
+title: "VulnHub - Tiki 1"
 tags: [Linux,Medium]
 categories: VulnHub OSCP
 ---
@@ -66,3 +66,20 @@ Verificamos o robots.txt
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/robots.png)
 
+## /tiki
+
+Acessamos o diretório encontrado /tiki
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/tiki.png)
+
+Pelo que parece é uma wiki
+
+Verificamos sua versão, e é a 21.1
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/tiki1.png)
+
+Procuramos por exploits para ela
+
+Encontramos uma de bypass de autenticação
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/tiki2.png)
