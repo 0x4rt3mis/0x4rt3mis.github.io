@@ -447,7 +447,3 @@ Verificando o cron dele, vemos que ele troca o arquivo entre as pastas a cada 3 
 Aqui vemos o código fonte do arquivo `file` que está vulnerável a buffer overflow
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/cron2.png)
-
-
-
-
