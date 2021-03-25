@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Raven 2"
-tags: [Linux,Medium,Wordpress,BurpSuite,Linpeas,Web]
+tags: [Linux,Medium,Wordpress,BurpSuite,Linpeas,Web,UDF]
 categories: VulnHub OSWE
 ---
 
@@ -321,6 +321,8 @@ Pesquisando por exploits, encontramos alguns que podemos utilizar para a escala�
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/mysql.png)
 
 A ideia aqui é explorar o User Defined Functions (UDF) do SQL que está sendo executado como root
+
+https://www.exploit-db.com/exploits/1518
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-raven2/mysql1.png)
 

