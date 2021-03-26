@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - HealthCare 1"
-tags: [Linux,Easy,Web,Gobuster,FTP,SQLInjection]
+tags: [Linux,Easy,Web,Gobuster,FTP,SQLInjection,BurpSuite,Linpeas]
 categories: VulnHub OSCP
 ---
 
@@ -36,7 +36,7 @@ Full ports scan
 
 > -T5 --> Modo insano
 
-### Verificamos que temos 4 portas abertas no servidor
+### Verificamos que temos 2 portas abertas no servidor
 
 > Porta 21 -> FTP
 
@@ -185,7 +185,7 @@ find / -perm -4000 2>/dev/null
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin4.png)
 
-Esse `/usr/bin/healthcare` chamou a atenção
+Esse `/usr/bin/healthcheck` chamou a atenção
 
 Vemos que ele roda uma sequência de binários
 
