@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Tiki 1"
-tags: [Linux,Medium]
+tags: [Linux,Easy,Web,Gobuster,Samba]
 categories: VulnHub OSCP
 ---
 
@@ -83,3 +83,59 @@ Procuramos por exploits para ela
 Encontramos uma de bypass de autenticação
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/tiki2.png)
+
+Executamos ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/tiki3.png)
+
+Jogamos a requisição para o BurpSuite
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/tiki4.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/tiki5.png)
+
+Repeater
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/tiki6.png)
+
+Removemos a senha e clicamos em Send
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/tiki7.png)
+
+Atualizamos a página e estamos logados como admin
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/tiki8.png)
+
+Começamos a pesquisar e encontramos credenciais salvas dentro do painel
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/cred.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/cred1.png)
+
+# silky -> root
+
+Agora logamos via SSH na máquina com essas credenciais, e damos o comando `su root` e viramos root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/ssh.png)
+
+Pegamos a flag de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/flag.png)
+
+# Bônus
+
+Acessamos o smb dele e baixamos um arquivo Notes.txt, onde está uma senha de admin
+
+```bash
+smbclient -L //192.168.56.140
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/smb.png)
+
+```bash
+smbclient //192.168.56.140/Notes
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-tiki1/smb1.png)
+
+Bom, essa é a senha do admin, esse é outro modo de se entrar nessa máquina
