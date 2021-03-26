@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - HealthCare 1"
-tags: [Linux,Easy,Web,Gobuster,Samba]
+tags: [Linux,Easy,Web,Gobuster,FTP,SQLInjection]
 categories: VulnHub OSCP
 ---
 
@@ -108,7 +108,124 @@ Apenas adicionando uma aspa no login, temos um ponto de SQLInjection
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/burp3.png)
 
+Bom, mais um `Blind SQLInjection`
 
+Vamos usar o `sqlmap`, não consegui explorar ela manualmente
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/req.png)
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/req1.png)
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/req2.png)
+
+Conseguimos duas senhas
+
+```
+ackbar:admin
+medical:medical
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/req3.png)
+
+Logamos com o usuário `medical`
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/ack.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/ack1.png)
+
+Não conseguimos explorar muita coisa por ai
+
+## FTP Upload
+
+Então acessamos o FTP pra fazer o upload de um reverse shell e chamar no browser
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/ack2.png)
+
+Acessamos uma página que temos permissão de escrita e fazemos o upload
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/ack3.png)
+
+Testamos no navegador e temos RCE!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/ack4.png)
+
+Agora pegamos um reverse shell
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/ack5.png)
+
+Agora escalamos para o usuário medical
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/ack6.png)
+
+# medical -> root
+
+Agora vamos escalar privilégio para root da máquina
+
+Rodamos o linpeas
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin.png)
+
+Passamos pra nossa máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin1.png)
+
+Rodamos na máquina virtual
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin2.png)
+
+Encontramos alguns binários não padrão sendo executado com permissões de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin3.png)
+
+Também podemos ver por aqui
+
+```bash
+find / -perm -4000 2>/dev/null
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin4.png)
+
+Esse `/usr/bin/healthcare` chamou a atenção
+
+Vemos que ele roda uma sequência de binários
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin5.png)
+
+Bom, vamos tentar fazer um `PATH HIJACKING`
+
+Primeira coisa é verificar qual é nosso PATH
+
+```bash
+echo $PATH
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin6.png)
+
+Agora criamos nosso "binário"
+
+```
+echo '#!/bin/sh' >> ifconfig
+echo '/bin/sh' >> ifconfig
+chmod +x ifconfig
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin7.png)
+
+Alteramos nosso PATH
+
+```
+export PATH=`pwd`:$PATH
+echo $PATH
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin8.png)
+
+Agora executamos o `healthcheck` e viramos root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/lin9.png)
+
+Pegamos as flags
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/flag.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-healthcare1/flag1.png)
