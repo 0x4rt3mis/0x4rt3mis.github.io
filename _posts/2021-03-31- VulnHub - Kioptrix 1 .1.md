@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Kioptrix 1.1"
-tags: [Linux,Easy,Web,Gobuster,]
+tags: [Linux,Easy,Web,Gobuster,SQLInjection,Kernel,Linpeas]
 categories: VulnHub OSCP
 ---
 
@@ -126,6 +126,8 @@ Agora testamos no Burp
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.1/burp11.png)
 
+# apache -> root
+
 Agora pegamos o Reverse Shell
 
 ```bash
@@ -151,3 +153,13 @@ Verificamos de cara que a versão do Kernel é muito antiga
 ```
 Linux version 2.6.9-55.EL
 ```
+
+https://www.exploit-db.com/exploits/9545
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.1/exp.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.1/exp1.png)
+
+Executamos e viramos root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.1/exp2.png)
