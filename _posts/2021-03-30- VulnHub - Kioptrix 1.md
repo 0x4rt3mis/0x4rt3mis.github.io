@@ -6,7 +6,7 @@ categories: VulnHub OSCP
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/inicial.png)
 
-Link: [Kioptrix 1](https://www.vulnhub.com/entry/photographer-1,519/)
+Link: [Kioptrix 1](https://www.vulnhub.com/entry/kioptrix-level-1-1,22/)
 
 # Enumeração
 
@@ -162,6 +162,4 @@ Executamos e viramos root
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1/s3.png)
 
-
-
-
+Não há flags para serem pegas nessa máquina, é apenas a exploração.
