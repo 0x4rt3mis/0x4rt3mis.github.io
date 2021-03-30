@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Kioptrix 1.3 #4"
-tags: [Linux,Easy,Web,Gobuster,SQLInjection,Linpeas,Brute Force,UDF]
+tags: [Linux,Easy,Web,Gobuster,BurSuite,SQLInjection,Linpeas,Brute Force,UDF]
 categories: VulnHub OSCP
 ---
 
@@ -304,9 +304,9 @@ Agora com outro exploit vamos tentar escalar privilégio nessa máquina novament
 
 Aqui está o guia que utilizei para escalação, a ideia aqui é explorar o UDF (User Defined Function)
 
-https://bernardodamele.blogspot.com/2009/01/command-execution-with-mysql-udf.html
+[Link 1](https://bernardodamele.blogspot.com/2009/01/command-execution-with-mysql-udf.html)
 
-http://www.iodigitalsec.com/mysql-root-to-system-root-with-udf-for-windows-and-linux/
+[Link 2](http://www.iodigitalsec.com/mysql-root-to-system-root-with-udf-for-windows-and-linux/)
 
 Seria necessário baixar a biblioteca necessária, contudo nessa máquina ela já está lá!
 
