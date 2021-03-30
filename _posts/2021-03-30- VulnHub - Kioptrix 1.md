@@ -1,5 +1,5 @@
 ---
-title: "VulnHub - Kioptrix 1"
+title: "VulnHub - Kioptrix 1 #1"
 tags: [Linux,Easy,Web,Gobuster,Samba,Kernel]
 categories: VulnHub OSCP
 ---

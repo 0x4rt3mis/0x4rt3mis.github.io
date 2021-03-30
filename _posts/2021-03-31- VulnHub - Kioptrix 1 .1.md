@@ -1,5 +1,5 @@
 ---
-title: "VulnHub - Kioptrix 1.1"
+title: "VulnHub - Kioptrix 1.1 #2"
 tags: [Linux,Easy,Web,Gobuster,SQLInjection,Kernel,Linpeas]
 categories: VulnHub OSCP
 ---
