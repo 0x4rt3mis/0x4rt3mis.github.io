@@ -202,3 +202,49 @@ Loneferret
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/lone.png)
 
 Agora vamos iniciar a escalação de privilégios para root
+
+# loneferret -> root
+
+Verificando o `sudo -l` vemos que o nosso usuário tem algumas permissões para executar como root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sudo.png)
+
+O que é esse ht que o usuário pode executar como root?
+
+```
+HT é um editor de executáveis distribuído sob a licença GPL.
+```
+
+Bom, se é um editor de texto, vamos adicionar o /bin/sh no sudoers para nosso usuário
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sudo1.png)
+
+Faço as mudanças necessários e abro ele como root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sudo2.png)
+
+Pesquisamos como escalar privilégio com ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sudo3.png)
+
+https://vk9-sec.com/ht-privilege-escalation/
+
+Iniciamos, apertamos F3 pra abrir o /etc/sudoers
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sudo4.png)
+
+Adicionamos o /bin/bash no sudoers do nosso usuário
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sudo5.png)
+
+F2 para salvar e F10 para sair
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sudo6.png)
+
+Verificamos que temos a permissão agora
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sudo7.png)
+
+Viramos root!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sudo87.png)
