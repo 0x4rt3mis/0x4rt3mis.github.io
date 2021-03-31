@@ -152,7 +152,7 @@ ssh john@127.0.0.1 -p 9999
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/proxy4.png)
 
-# john -> root
+# john -> sara
 
 Agora vamos tentar fazer a escalação de privilégio desse usuário, a primeira coisa que nos embarrera é o fato de não conseguirmos fazer o upgrade do bash
 
@@ -172,3 +172,46 @@ Ao verificarmos o `/var/www/login.php` vemos que ele tem a senha do mysql
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/sql.png)
 
+Logamos no mysql
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/ms.png)
+
+Verificamos outras senhas dentro do banco de dados
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/ms1.png)
+
+```
+john@skytech.com: hereisjohn
+sara@skytech.com: ihatethisjob
+william@skytech.com: senseable
+```
+
+Verificamos quais usuários temos no /etc/passwd que possuem um shell válido
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/ms2.png)
+
+Tentamos login com o william e com a sara, apenas o da sara nos deu retorno válido
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/ms3.png)
+
+# sara -> root
+
+Logamos como sara
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/ms4.png)
+
+Fazemos aquela mesma técnica pra pegar um shell interativo
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/ms5.png)
+
+Verificamos no `sudo -l` que ele pode executar binários como se root fosse
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/ms6.png)
+
+Bom não temos como escalar privilégio com o cat nem com o ls, mas podemos ler a flag de root, e ali está a senha de root!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/ms7.png)
+
+Então agora logamos como root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-skytower/ms8.png)
