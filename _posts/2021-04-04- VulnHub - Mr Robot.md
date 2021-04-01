@@ -20,7 +20,7 @@ arp-scan -I eth1 192.168.56.0/24
 
 ## Segundo passo é rodar o nmap contra a máquina, para verificar quais portas estão abertas e quais serviços estão sendo disponibilizados pelas portas.
 
-![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-morrobot/nmap.png)
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/nmap.png)
 
 Full ports scan
 
