@@ -1,6 +1,6 @@
 ---
 title: "VulnHub - Mr Robot 1"
-tags: [Linux,Easy,Web,Gobuster,BurSuite,SQLInjection]
+tags: [Linux,Easy,Web,Gobuster,BurSuite,SQLInjection,Brute Force,WordPress]
 categories: VulnHub OSCP
 ---
 
@@ -162,3 +162,88 @@ Agora com o login e senha dele, vamos entrar na conta dele e ver o que podemos f
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/login.png)
 
 ![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/login1.png)
+
+Verificamos que podemos alterar plugins na página
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/wp.png)
+
+Pegamos um simple php shell
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/wp1.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/wp2.png)
+
+Sucesso!
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/wp3.png)
+
+## Testando RCE
+
+Testamos RCE
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/wp4.png)
+
+Show! Agora é só pegar um shell
+
+# daemon -> robot
+
+Jogamos para o burpsuite para melhor trabalhar
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/b.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/b1.png)
+
+Repeater
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/b2.png)
+
+Não consegui pegar nenhum que funcionasse, então resolvi jogar um web shell direto lá
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/b3.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/b4.png)
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/b5.png)
+
+Agora pegamos o shell reverso
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/b6.png)
+
+Verificamos na pasta home do robot que tem um md5 ali
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/ro.png)
+
+Conseguimos quebrar ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/ro1.png)
+
+robot:abcdefghijklmnopqrstuvwxyz
+
+Temos a senha dele, então logamos com ele
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/ro2.png)
+
+# robot -> root
+
+Vamos iniciar a escalação de privilégios para root
+
+Pesquisamos por binários com suid habilitado
+
+```bash
+find / -perm -4000 2>/dev/null
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/ro3.png)
+
+Encontramos que o nmap está com umas permissões a mais, coisas que não é normal ter, então exploramos e viramos root
+
+```bash
+nmap --interactive
+!sh
+```
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/ro4.png)
+
+Pegamos a flag de root
+
+![](https://raw.githubusercontent.com/0x4rt3mis/0x4rt3mis.github.io/master/img/vulnhub/vulnhub-mrrobot/ro5.png)
